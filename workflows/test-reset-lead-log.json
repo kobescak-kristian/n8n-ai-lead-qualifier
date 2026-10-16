@@ -1,0 +1,55 @@
+{
+  "name": "Q116 Test reset: clear lead_log",
+  "id": "Q116ResetTable01",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "f3c988b3-92ec-461d-aa74-cacde4612eeb",
+      "name": "Run before a test run",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "operation": "clear",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "lead_log"
+        }
+      },
+      "id": "b825f289-45b4-4a57-95df-9f593fd111f0",
+      "name": "Clear lead_log",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        260,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Run before a test run": {
+      "main": [
+        [
+          {
+            "node": "Clear lead_log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}

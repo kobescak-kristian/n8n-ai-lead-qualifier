@@ -9,7 +9,7 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "3bece667-3918-4ea1-b3ed-d2df479abb92",
+      "id": "fe4999c2-bc50-4f00-adba-4eab333278e8",
       "name": "Report request",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
@@ -17,7 +17,7 @@
         0,
         0
       ],
-      "webhookId": "80517140-0899-4c23-a563-4e6c3358534b"
+      "webhookId": "c04f06c8-bd34-4eba-99a6-2c8e19c1c0a5"
     },
     {
       "parameters": {
@@ -30,7 +30,7 @@
         },
         "returnAll": true
       },
-      "id": "f1ab8cc4-a0cc-4d82-b8f5-25d3f7f5886a",
+      "id": "f87dd837-624d-490d-a348-20a7b269c48d",
       "name": "All log rows",
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
@@ -44,7 +44,7 @@
       "parameters": {
         "jsCode": "const log = $input.all().map((i) => i.json).filter((j) => j && j.id !== undefined);\nreturn [{ json: { log } }];\n"
       },
-      "id": "e2e5f969-73d1-456d-8ec8-53ee9480a378",
+      "id": "0a0ebf0e-e3a6-43bf-b25d-48fff8a5f3c6",
       "name": "Collect rows",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -61,7 +61,7 @@
         "nodeCredentialType": "hubspotAppToken",
         "options": {}
       },
-      "id": "a74a5f37-cef4-4980-8316-793196ad2e14",
+      "id": "1171779b-d8f3-4d75-af1c-adcaaf82793a",
       "name": "HubSpot contacts",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -74,7 +74,7 @@
       "parameters": {
         "jsCode": "const h = $input.first().json;\nconst emails = (h.results || []).map((c) => (c.properties && c.properties.email) || '').filter(Boolean);\nreturn [{ json: {\n  log: $('Collect rows').first().json.log,\n  hubspot_emails: emails,\n  hubspot_truncated: Boolean(h.paging && h.paging.next),\n} }];\n"
       },
-      "id": "5702379f-4ffd-4943-a095-74c2a9b007a7",
+      "id": "1c9ba9f4-1e72-4d24-be23-9a8afa52c5c9",
       "name": "Build report",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -89,7 +89,7 @@
         "responseBody": "={{ JSON.stringify($json) }}",
         "options": {}
       },
-      "id": "bba17b61-e59b-4d22-a82c-717132f4c187",
+      "id": "30e4be8c-301d-42b3-8cfe-c36175523319",
       "name": "Send report",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,

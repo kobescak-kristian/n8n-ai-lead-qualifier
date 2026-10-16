@@ -4,7 +4,7 @@
   "nodes": [
     {
       "parameters": {},
-      "id": "36b6070a-14b5-42d4-90b9-1055931055ca",
+      "id": "a7c16d36-23cb-499f-b14f-0ff1574caed8",
       "name": "When the lead workflow fails",
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1,
@@ -30,7 +30,7 @@
           "includeLinkToWorkflow": false
         }
       },
-      "id": "f85926a7-d4e4-4596-8554-c774d5873fc0",
+      "id": "36f058ab-0a78-4c85-8834-b7f857a9229d",
       "name": "Alert in Slack",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,

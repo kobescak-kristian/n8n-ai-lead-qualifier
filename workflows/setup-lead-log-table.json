@@ -4,7 +4,7 @@
   "nodes": [
     {
       "parameters": {},
-      "id": "4ca5586e-b652-4de7-903b-e0439b36f5ac",
+      "id": "33d406f0-d5b4-40b5-9ad9-986693d5d78a",
       "name": "Run once",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -126,7 +126,7 @@
           "createIfNotExists": true
         }
       },
-      "id": "54610eba-ae06-46bf-88c7-37a39873c6b1",
+      "id": "fa8f9b4f-1577-4668-b095-d5c75574f978",
       "name": "Create lead_log table",
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
