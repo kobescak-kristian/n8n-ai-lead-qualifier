@@ -1,0 +1,165 @@
+{
+  "name": "Q116 Lead report (test runner)",
+  "id": "Q116LeadReport01",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "lead-report",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "3bece667-3918-4ea1-b3ed-d2df479abb92",
+      "name": "Report request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "80517140-0899-4c23-a563-4e6c3358534b"
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "lead_log"
+        },
+        "returnAll": true
+      },
+      "id": "f1ab8cc4-a0cc-4d82-b8f5-25d3f7f5886a",
+      "name": "All log rows",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        260,
+        0
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const log = $input.all().map((i) => i.json).filter((j) => j && j.id !== undefined);\nreturn [{ json: { log } }];\n"
+      },
+      "id": "e2e5f969-73d1-456d-8ec8-53ee9480a378",
+      "name": "Collect rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts?limit=100&properties=email",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "options": {}
+      },
+      "id": "a74a5f37-cef4-4980-8316-793196ad2e14",
+      "name": "HubSpot contacts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const h = $input.first().json;\nconst emails = (h.results || []).map((c) => (c.properties && c.properties.email) || '').filter(Boolean);\nreturn [{ json: {\n  log: $('Collect rows').first().json.log,\n  hubspot_emails: emails,\n  hubspot_truncated: Boolean(h.paging && h.paging.next),\n} }];\n"
+      },
+      "id": "5702379f-4ffd-4943-a095-74c2a9b007a7",
+      "name": "Build report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "bba17b61-e59b-4d22-a82c-717132f4c187",
+      "name": "Send report",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1300,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Report request": {
+      "main": [
+        [
+          {
+            "node": "All log rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "All log rows": {
+      "main": [
+        [
+          {
+            "node": "Collect rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect rows": {
+      "main": [
+        [
+          {
+            "node": "HubSpot contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HubSpot contacts": {
+      "main": [
+        [
+          {
+            "node": "Build report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build report": {
+      "main": [
+        [
+          {
+            "node": "Send report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}

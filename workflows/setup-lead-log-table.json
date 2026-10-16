@@ -1,0 +1,158 @@
+{
+  "name": "Q116 Setup: create lead_log table",
+  "id": "Q116SetupTable01",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4ca5586e-b652-4de7-903b-e0439b36f5ac",
+      "name": "Run once",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "operation": "create",
+        "tableName": "lead_log",
+        "columns": {
+          "column": [
+            {
+              "name": "lead_key",
+              "type": "string"
+            },
+            {
+              "name": "email",
+              "type": "string"
+            },
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "company",
+              "type": "string"
+            },
+            {
+              "name": "website",
+              "type": "string"
+            },
+            {
+              "name": "job_title",
+              "type": "string"
+            },
+            {
+              "name": "message",
+              "type": "string"
+            },
+            {
+              "name": "source",
+              "type": "string"
+            },
+            {
+              "name": "test_flag",
+              "type": "string"
+            },
+            {
+              "name": "route",
+              "type": "string"
+            },
+            {
+              "name": "final_status",
+              "type": "string"
+            },
+            {
+              "name": "reason",
+              "type": "string"
+            },
+            {
+              "name": "fit_score",
+              "type": "number"
+            },
+            {
+              "name": "confidence",
+              "type": "number"
+            },
+            {
+              "name": "industry",
+              "type": "string"
+            },
+            {
+              "name": "company_size",
+              "type": "string"
+            },
+            {
+              "name": "ai_valid",
+              "type": "boolean"
+            },
+            {
+              "name": "website_status",
+              "type": "string"
+            },
+            {
+              "name": "review_reason",
+              "type": "string"
+            },
+            {
+              "name": "reviewed_at",
+              "type": "string"
+            },
+            {
+              "name": "hubspot_id",
+              "type": "string"
+            },
+            {
+              "name": "reply_status",
+              "type": "string"
+            },
+            {
+              "name": "reply_subject",
+              "type": "string"
+            },
+            {
+              "name": "reply_draft",
+              "type": "string"
+            },
+            {
+              "name": "error",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "createIfNotExists": true
+        }
+      },
+      "id": "54610eba-ae06-46bf-88c7-37a39873c6b1",
+      "name": "Create lead_log table",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        260,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Run once": {
+      "main": [
+        [
+          {
+            "node": "Create lead_log table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}

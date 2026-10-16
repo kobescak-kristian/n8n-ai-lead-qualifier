@@ -1,0 +1,65 @@
+{
+  "name": "Q116 Error alert",
+  "id": "Q116ErrorAlert01",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "36b6070a-14b5-42d4-90b9-1055931055ca",
+      "name": "When the lead workflow fails",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "post",
+        "authentication": "accessToken",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "#lead-review"
+        },
+        "messageType": "text",
+        "text": "={{ `:rotating_light: *Lead workflow error*\\nWorkflow: ${$json.workflow.name}\\nNode: ${$json.execution.lastNodeExecuted}\\nError: ${$json.execution.error.message}\\nExecution: ${$json.execution.url}` }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "f85926a7-d4e4-4596-8554-c774d5873fc0",
+      "name": "Alert in Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        260,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    }
+  ],
+  "connections": {
+    "When the lead workflow fails": {
+      "main": [
+        [
+          {
+            "node": "Alert in Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}
