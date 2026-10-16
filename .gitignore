@@ -1,0 +1,6 @@
+.env
+*.env
+.n8n/
+node_modules/
+__pycache__/
+tests/results/raw/
