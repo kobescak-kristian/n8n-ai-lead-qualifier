@@ -4,7 +4,7 @@ n8n AI lead qualifier with human review in Slack; Upwork portfolio build (Q-116)
 **Classification:** PROJECT · T0
 **Plan:** Build is done when all five quality-bar items hold (owner-agreed 2026-10-16, no fixed date): (1) form → website enrichment → AI score → HubSpot; (2) hard cases handled and visible: unsure leads to Slack approval, broken input / invalid AI output never reach the CRM, duplicates skipped, API errors retried and alerted; (3) AI drafts the first reply to good leads, a person approves in Slack before it is sent; (4) 30-40 realistic test leads with expected routes, real recorded numbers, simulated failures marked as such; (5) 2-3 minute Loom + client-language README.
 **Stack (owner choices 2026-10-16/17):** local n8n 2.43.7 (npm, Node 24.20.0) · HubSpot free demo account "Portfolio Demo" (service key; separate from the owner's real HubSpot) · Claude Opus 5.5 via Anthropic workspace `lead-qualifier` · Slack demo workspace `#lead-review` · Gmail SMTP, demo mode (replies only to the owner's test inbox).
-**Status:** quality-bar items 1-4 met (evidence below); item 5 README done, Loom not recorded. GitHub remote not created yet (agent `gh repo create` was permission-blocked; owner runs it).
+**Status:** quality-bar items 1-4 met (evidence below); item 5 README done, Loom not recorded. Remote: private GitHub repo kobescak-kristian/n8n-ai-lead-qualifier (created by owner 2026-10-17; first push 68966ba). Public release is a separate owner decision.
 **Open decisions:** none
 **Decisions:** adr/001-human-review-gate.md (Accepted 2026-10-17)
 
