@@ -61,8 +61,10 @@ Tested once on 2026-10-17 with **39 fictional test leads**. The expected route f
 | Attempts to trick the AI (form and hidden website text) | 2 of 2 scored as low fit |
 | Broken AI answer (simulated) | sent to a person, not to the CRM |
 | API failure (simulated) | 3 tries, then Slack alert; nothing written to the CRM |
-| AI-drafted replies | 16 drafted; 9 approved and sent to the test inbox, 7 rejected by the reviewer; none sent without approval |
+| AI-drafted replies | 16 drafted; 9 approved and sent to the test inbox, 7 rejected; none sent without approval |
 | Time from form to routing decision | median 4.9 s, slowest 16.8 s (website that does not answer) for the 32 leads the AI scored; 0.2 s for invalid inputs and duplicates |
+
+In this run the reviewer's approve / reject clicks were made to test both buttons, not to judge lead or draft quality; the quality of the reply drafts was not measured.
 
 The one miss: a 6-person studio "just exploring, no budget" was expected to go to review; the AI was confident it is a low fit and logged it.
 
