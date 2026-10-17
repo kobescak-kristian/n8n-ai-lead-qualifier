@@ -1,0 +1,673 @@
+{
+  "started_utc": "20261017T000614Z",
+  "base": "http://localhost:5678",
+  "rows": [
+    {
+      "id": "F01",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "http_status": 200,
+      "route": "high_fit",
+      "log_id": 1,
+      "seconds": 5.36,
+      "response": {
+        "route": "high_fit",
+        "log_id": 1,
+        "fit_score": 92,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "F02",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "http_status": 200,
+      "route": "high_fit",
+      "log_id": 2,
+      "seconds": 4.15,
+      "response": {
+        "route": "high_fit",
+        "log_id": 2,
+        "fit_score": 90,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "F03",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "http_status": 200,
+      "route": "high_fit",
+      "log_id": 3,
+      "seconds": 4.0,
+      "response": {
+        "route": "high_fit",
+        "log_id": 3,
+        "fit_score": 88,
+        "confidence": 0.85
+      }
+    },
+    {
+      "id": "F04",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "http_status": 200,
+      "route": "high_fit",
+      "log_id": 4,
+      "seconds": 3.6,
+      "response": {
+        "route": "high_fit",
+        "log_id": 4,
+        "fit_score": 88,
+        "confidence": 0.88
+      }
+    },
+    {
+      "id": "F05",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "http_status": 200,
+      "route": "high_fit",
+      "log_id": 5,
+      "seconds": 3.58,
+      "response": {
+        "route": "high_fit",
+        "log_id": 5,
+        "fit_score": 88,
+        "confidence": 0.88
+      }
+    },
+    {
+      "id": "F06",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "http_status": 200,
+      "route": "high_fit",
+      "log_id": 6,
+      "seconds": 7.21,
+      "response": {
+        "route": "high_fit",
+        "log_id": 6,
+        "fit_score": 88,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "F07",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "http_status": 200,
+      "route": "high_fit",
+      "log_id": 7,
+      "seconds": 4.43,
+      "response": {
+        "route": "high_fit",
+        "log_id": 7,
+        "fit_score": 90,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "F08",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "http_status": 200,
+      "route": "high_fit",
+      "log_id": 8,
+      "seconds": 4.29,
+      "response": {
+        "route": "high_fit",
+        "log_id": 8,
+        "fit_score": 90,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "N01",
+      "category": "clear_non_fit",
+      "expected": [
+        "low_fit"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 9,
+      "seconds": 4.58,
+      "response": {
+        "route": "low_fit",
+        "log_id": 9,
+        "fit_score": 2,
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "N02",
+      "category": "clear_non_fit",
+      "expected": [
+        "low_fit"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 10,
+      "seconds": 6.04,
+      "response": {
+        "route": "low_fit",
+        "log_id": 10,
+        "fit_score": 2,
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "N03",
+      "category": "clear_non_fit",
+      "expected": [
+        "low_fit"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 11,
+      "seconds": 4.04,
+      "response": {
+        "route": "low_fit",
+        "log_id": 11,
+        "fit_score": 2,
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "N04",
+      "category": "clear_non_fit",
+      "expected": [
+        "low_fit"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 12,
+      "seconds": 2.91,
+      "response": {
+        "route": "low_fit",
+        "log_id": 12,
+        "fit_score": 0,
+        "confidence": 0.97
+      }
+    },
+    {
+      "id": "N05",
+      "category": "clear_non_fit",
+      "expected": [
+        "low_fit"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 13,
+      "seconds": 3.85,
+      "response": {
+        "route": "low_fit",
+        "log_id": 13,
+        "fit_score": 3,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "N06",
+      "category": "clear_non_fit",
+      "expected": [
+        "low_fit"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 14,
+      "seconds": 5.98,
+      "response": {
+        "route": "low_fit",
+        "log_id": 14,
+        "fit_score": 8,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "N07",
+      "category": "clear_non_fit",
+      "expected": [
+        "low_fit"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 15,
+      "seconds": 4.4,
+      "response": {
+        "route": "low_fit",
+        "log_id": 15,
+        "fit_score": 2,
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "N08",
+      "category": "clear_non_fit",
+      "expected": [
+        "low_fit"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 16,
+      "seconds": 5.65,
+      "response": {
+        "route": "low_fit",
+        "log_id": 16,
+        "fit_score": 3,
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "U01",
+      "category": "unsure",
+      "expected": [
+        "review"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 17,
+      "seconds": 4.98,
+      "response": {
+        "route": "low_fit",
+        "log_id": 17,
+        "fit_score": 25,
+        "confidence": 0.85
+      }
+    },
+    {
+      "id": "U02",
+      "category": "unsure",
+      "expected": [
+        "review"
+      ],
+      "http_status": 200,
+      "route": "review",
+      "log_id": 18,
+      "seconds": 4.85,
+      "response": {
+        "route": "review",
+        "log_id": 18,
+        "fit_score": 45,
+        "confidence": 0.6
+      }
+    },
+    {
+      "id": "U03",
+      "category": "unsure",
+      "expected": [
+        "review"
+      ],
+      "http_status": 200,
+      "route": "review",
+      "log_id": 19,
+      "seconds": 8.54,
+      "response": {
+        "route": "review",
+        "log_id": 19,
+        "fit_score": 45,
+        "confidence": 0.75
+      }
+    },
+    {
+      "id": "U04",
+      "category": "unsure",
+      "expected": [
+        "review"
+      ],
+      "http_status": 200,
+      "route": "review",
+      "log_id": 20,
+      "seconds": 4.0,
+      "response": {
+        "route": "review",
+        "log_id": 20,
+        "fit_score": 55,
+        "confidence": 0.75
+      }
+    },
+    {
+      "id": "U05",
+      "category": "unsure",
+      "expected": [
+        "review"
+      ],
+      "http_status": 200,
+      "route": "review",
+      "log_id": 21,
+      "seconds": 5.29,
+      "response": {
+        "route": "review",
+        "log_id": 21,
+        "fit_score": 42,
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "U06",
+      "category": "unsure",
+      "expected": [
+        "review"
+      ],
+      "http_status": 200,
+      "route": "review",
+      "log_id": 22,
+      "seconds": 6.76,
+      "response": {
+        "route": "review",
+        "log_id": 22,
+        "fit_score": 15,
+        "confidence": 0.4
+      }
+    },
+    {
+      "id": "U07",
+      "category": "unsure",
+      "expected": [
+        "review"
+      ],
+      "http_status": 200,
+      "route": "review",
+      "log_id": 23,
+      "seconds": 3.82,
+      "response": {
+        "route": "review",
+        "log_id": 23,
+        "fit_score": 55,
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "B01",
+      "category": "broken_input",
+      "expected": [
+        "invalid_input"
+      ],
+      "http_status": 200,
+      "route": "invalid_input",
+      "log_id": 24,
+      "seconds": 0.18,
+      "response": {
+        "route": "invalid_input",
+        "log_id": 24,
+        "errors": [
+          "missing email"
+        ]
+      }
+    },
+    {
+      "id": "B02",
+      "category": "broken_input",
+      "expected": [
+        "invalid_input"
+      ],
+      "http_status": 200,
+      "route": "invalid_input",
+      "log_id": 25,
+      "seconds": 0.14,
+      "response": {
+        "route": "invalid_input",
+        "log_id": 25,
+        "errors": [
+          "invalid email"
+        ]
+      }
+    },
+    {
+      "id": "B03",
+      "category": "broken_input",
+      "expected": [
+        "invalid_input"
+      ],
+      "http_status": 200,
+      "route": "invalid_input",
+      "log_id": 26,
+      "seconds": 0.16,
+      "response": {
+        "route": "invalid_input",
+        "log_id": 26,
+        "errors": [
+          "no name or company",
+          "empty message"
+        ]
+      }
+    },
+    {
+      "id": "B04",
+      "category": "broken_input",
+      "expected": [
+        "invalid_input"
+      ],
+      "http_status": 200,
+      "route": "invalid_input",
+      "log_id": 27,
+      "seconds": 0.16,
+      "response": {
+        "route": "invalid_input",
+        "log_id": 27,
+        "errors": [
+          "message too long (21000 characters)"
+        ]
+      }
+    },
+    {
+      "id": "B05",
+      "category": "junk_text",
+      "expected": [
+        "low_fit",
+        "review"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 28,
+      "seconds": 3.92,
+      "response": {
+        "route": "low_fit",
+        "log_id": 28,
+        "fit_score": 2,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "B06",
+      "category": "html_in_input",
+      "expected": [
+        "low_fit",
+        "review"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 29,
+      "seconds": 6.29,
+      "response": {
+        "route": "low_fit",
+        "log_id": 29,
+        "fit_score": 3,
+        "confidence": 0.85
+      }
+    },
+    {
+      "id": "B07",
+      "category": "non_english",
+      "expected": [
+        "high_fit",
+        "review"
+      ],
+      "http_status": 200,
+      "route": "high_fit",
+      "log_id": 30,
+      "seconds": 6.25,
+      "response": {
+        "route": "high_fit",
+        "log_id": 30,
+        "fit_score": 85,
+        "confidence": 0.85
+      }
+    },
+    {
+      "id": "D01",
+      "category": "duplicate",
+      "expected": [
+        "duplicate"
+      ],
+      "http_status": 200,
+      "route": "duplicate",
+      "log_id": 31,
+      "seconds": 0.26,
+      "response": {
+        "route": "duplicate",
+        "log_id": 31
+      }
+    },
+    {
+      "id": "D02",
+      "category": "duplicate",
+      "expected": [
+        "duplicate"
+      ],
+      "http_status": 200,
+      "route": "duplicate",
+      "log_id": 32,
+      "seconds": 0.41,
+      "response": {
+        "route": "duplicate",
+        "log_id": 32
+      }
+    },
+    {
+      "id": "D03",
+      "category": "duplicate",
+      "expected": [
+        "duplicate"
+      ],
+      "http_status": 200,
+      "route": "duplicate",
+      "log_id": 33,
+      "seconds": 0.24,
+      "response": {
+        "route": "duplicate",
+        "log_id": 33
+      }
+    },
+    {
+      "id": "A01",
+      "category": "prompt_injection",
+      "expected": [
+        "low_fit",
+        "review"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 34,
+      "seconds": 4.04,
+      "response": {
+        "route": "low_fit",
+        "log_id": 34,
+        "fit_score": 2,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "A02",
+      "category": "prompt_injection",
+      "expected": [
+        "low_fit",
+        "review"
+      ],
+      "http_status": 200,
+      "route": "low_fit",
+      "log_id": 35,
+      "seconds": 8.16,
+      "response": {
+        "route": "low_fit",
+        "log_id": 35,
+        "fit_score": 3,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "W01",
+      "category": "website_problem",
+      "expected": [
+        "high_fit",
+        "review"
+      ],
+      "http_status": 200,
+      "route": "review",
+      "log_id": 36,
+      "seconds": 7.3,
+      "response": {
+        "route": "review",
+        "log_id": 36,
+        "fit_score": 80,
+        "confidence": 0.65
+      }
+    },
+    {
+      "id": "W02",
+      "category": "website_problem",
+      "expected": [
+        "high_fit",
+        "review"
+      ],
+      "http_status": 200,
+      "route": "review",
+      "log_id": 37,
+      "seconds": 16.81,
+      "response": {
+        "route": "review",
+        "log_id": 37,
+        "fit_score": 78,
+        "confidence": 0.65
+      }
+    },
+    {
+      "id": "X01",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "http_status": 200,
+      "route": "review",
+      "log_id": 38,
+      "seconds": 6.96,
+      "response": {
+        "route": "review",
+        "log_id": 38,
+        "fit_score": null,
+        "confidence": null
+      }
+    },
+    {
+      "id": "X02",
+      "category": "simulated_api_error",
+      "expected": [
+        "error"
+      ],
+      "http_status": 200,
+      "route": "error",
+      "log_id": 39,
+      "seconds": 7.81,
+      "response": {
+        "route": "error",
+        "log_id": 39
+      }
+    }
+  ]
+}

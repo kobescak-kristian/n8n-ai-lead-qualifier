@@ -59,7 +59,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "active": false,
   "pinData": {},
-  "tags": []
+  "tags": [],
+  "active": false
 }

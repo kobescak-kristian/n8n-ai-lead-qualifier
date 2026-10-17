@@ -1,6 +1,6 @@
 # ADR-001 — Human review gate before CRM writes and outbound replies
 
-**Status:** Proposed (2026-10-16)
+**Status:** Accepted (2026-10-17); proposed 2026-10-16
 **Date:** 2026-10-16
 **Author:** Kristian Kobescak
 
@@ -47,3 +47,15 @@ invalid AI outputs and zero unapproved unsure leads reaching HubSpot.
 Reopen when a client deployment needs approver identity (move to the
 in-Slack interactive mode on a public instance) or when the review rate
 on real traffic is too high to be practical.
+
+## Verification (2026-10-17)
+Implementation: `workflows/lead-qualifier.json`, nodes "Check AI answer"
+(schema and range checks), "Decide route" (routing rules), "Ask reviewer in
+Slack" and "Approve reply in Slack" (send-and-wait approvals before the
+HubSpot write and before the e-mail send). Evidence:
+`tests/results/run-20261017T000614Z.report.md`, produced by
+`python tests/run_tests.py report` against the live n8n lead log and HubSpot:
+0 leads in HubSpot that should not be there; 16 test contacts in HubSpot,
+all through an allowed path (9 high fit + 7 approved by the reviewer);
+simulated invalid AI output routed to review; 9 replies sent, all after
+approval.

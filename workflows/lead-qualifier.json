@@ -15,7 +15,7 @@
       "typeVersion": 2.1,
       "position": [
         0,
-        0
+        304
       ],
       "webhookId": "3916d9fa-fd7d-4a90-a237-944df630ce6e"
     },
@@ -116,8 +116,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        260,
-        0
+        224,
+        304
       ]
     },
     {
@@ -129,8 +129,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        520,
-        0
+        448,
+        304
       ]
     },
     {
@@ -164,8 +164,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        780,
-        0
+        672,
+        304
       ]
     },
     {
@@ -177,14 +177,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1040,
-        400
+        896,
+        496
       ]
     },
     {
       "parameters": {
-        "resource": "row",
-        "operation": "insert",
         "dataTableId": {
           "__rl": true,
           "mode": "name",
@@ -203,8 +201,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1300,
-        400
+        1120,
+        496
       ]
     },
     {
@@ -218,13 +216,12 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        1560,
-        400
+        1344,
+        496
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "get",
         "dataTableId": {
           "__rl": true,
@@ -236,7 +233,6 @@
           "conditions": [
             {
               "keyName": "lead_key",
-              "condition": "eq",
               "keyValue": "={{ $('Validate lead').first().json.lead_key }}"
             }
           ]
@@ -248,8 +244,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1040,
-        0
+        896,
+        208
       ],
       "alwaysOutputData": true
     },
@@ -284,8 +280,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1300,
-        0
+        1120,
+        208
       ]
     },
     {
@@ -297,14 +293,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1560,
-        -400
+        1344,
+        112
       ]
     },
     {
       "parameters": {
-        "resource": "row",
-        "operation": "insert",
         "dataTableId": {
           "__rl": true,
           "mode": "name",
@@ -323,8 +317,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1820,
-        -400
+        1568,
+        112
       ]
     },
     {
@@ -338,8 +332,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        2080,
-        -400
+        1792,
+        112
       ]
     },
     {
@@ -351,14 +345,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1560,
-        0
+        1344,
+        304
       ]
     },
     {
       "parameters": {
-        "resource": "row",
-        "operation": "insert",
         "dataTableId": {
           "__rl": true,
           "mode": "name",
@@ -377,16 +369,14 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1820,
-        0
+        1568,
+        304
       ]
     },
     {
       "parameters": {
-        "method": "GET",
         "url": "={{ $('Validate lead').first().json.fetch_url }}",
         "options": {
-          "timeout": 8000,
           "redirect": {
             "redirect": {
               "maxRedirects": 3
@@ -397,7 +387,8 @@
               "responseFormat": "text",
               "outputPropertyName": "html"
             }
-          }
+          },
+          "timeout": 8000
         }
       },
       "id": "2a309440-6d77-41d7-8591-9a6cf0a07dda",
@@ -405,11 +396,11 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2080,
-        0
+        1792,
+        304
       ],
-      "onError": "continueRegularOutput",
-      "alwaysOutputData": true
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -420,8 +411,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2340,
-        0
+        2016,
+        304
       ]
     },
     {
@@ -433,8 +424,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2600,
-        0
+        2240,
+        304
       ]
     },
     {
@@ -468,13 +459,13 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2860,
-        0
+        2464,
+        304
       ],
-      "onError": "continueErrorOutput",
       "retryOnFail": true,
       "maxTries": 3,
-      "waitBetweenTries": 3000
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -485,8 +476,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3120,
-        0
+        2688,
+        208
       ]
     },
     {
@@ -498,8 +489,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3380,
-        0
+        2912,
+        208
       ]
     },
     {
@@ -511,13 +502,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3640,
-        0
+        3136,
+        208
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -528,8 +518,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -547,8 +535,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        3900,
-        0
+        3360,
+        208
       ]
     },
     {
@@ -562,8 +550,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        4160,
-        0
+        3584,
+        208
       ]
     },
     {
@@ -651,8 +639,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        4420,
-        0
+        3808,
+        192
       ]
     },
     {
@@ -662,15 +650,13 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        4680,
-        500
+        4032,
+        400
       ]
     },
     {
       "parameters": {
-        "resource": "message",
         "operation": "sendAndWait",
-        "authentication": "accessToken",
         "select": "channel",
         "channelId": {
           "__rl": true,
@@ -678,20 +664,16 @@
           "value": "={{ $('Settings').first().json.slack_channel }}"
         },
         "message": "={{ $('Decide route').first().json.review_text }}",
-        "responseType": "approval",
         "approvalOptions": {
           "values": {
             "approvalType": "double",
-            "approveLabel": "Approve",
             "disapproveLabel": "Reject"
           }
         },
         "options": {
           "limitWaitTime": {
             "values": {
-              "limitType": "afterTimeInterval",
-              "resumeAmount": 24,
-              "resumeUnit": "hours"
+              "resumeAmount": 24
             }
           },
           "appendAttribution": false
@@ -702,8 +684,8 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
-        4680,
-        250
+        4032,
+        208
       ],
       "webhookId": "4408af92-7fba-44c7-b18b-414c7e328047"
     },
@@ -738,8 +720,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        4940,
-        250
+        4256,
+        208
       ]
     },
     {
@@ -751,13 +733,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5200,
-        450
+        4480,
+        304
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -768,8 +749,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -787,8 +766,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        5460,
-        450
+        4704,
+        304
       ]
     },
     {
@@ -800,13 +779,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5200,
-        250
+        4480,
+        112
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -817,8 +795,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -836,24 +812,22 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        5460,
-        250
+        4704,
+        112
       ]
     },
     {
       "parameters": {
         "authentication": "appToken",
-        "resource": "contact",
-        "operation": "upsert",
         "email": "={{ $('Validate lead').first().json.lead.email }}",
         "additionalFields": {
-          "firstName": "={{ $('Decide route').first().json.first_name }}",
-          "lastName": "={{ $('Decide route').first().json.last_name }}",
           "companyName": "={{ $('Validate lead').first().json.lead.company }}",
-          "jobTitle": "={{ $('Validate lead').first().json.lead.job_title }}",
-          "websiteUrl": "={{ $('Validate lead').first().json.lead.website }}",
+          "firstName": "={{ $('Decide route').first().json.first_name }}",
           "industry": "={{ $('Decide route').first().json.ai ? $('Decide route').first().json.ai.industry : '' }}",
-          "message": "={{ $('Decide route').first().json.crm_note }}"
+          "jobTitle": "={{ $('Validate lead').first().json.lead.job_title }}",
+          "lastName": "={{ $('Decide route').first().json.last_name }}",
+          "message": "={{ $('Decide route').first().json.crm_note }}",
+          "websiteUrl": "={{ $('Validate lead').first().json.lead.website }}"
         },
         "options": {}
       },
@@ -862,13 +836,13 @@
       "type": "n8n-nodes-base.hubspot",
       "typeVersion": 2.2,
       "position": [
-        5720,
-        0
+        4928,
+        16
       ],
-      "onError": "continueErrorOutput",
       "retryOnFail": true,
       "maxTries": 3,
-      "waitBetweenTries": 3000
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -879,13 +853,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5980,
-        0
+        5152,
+        -80
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -896,8 +869,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -915,22 +886,18 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        6240,
-        0
+        5376,
+        -80
       ]
     },
     {
       "parameters": {
-        "resource": "message",
-        "operation": "post",
-        "authentication": "accessToken",
         "select": "channel",
         "channelId": {
           "__rl": true,
           "mode": "name",
           "value": "={{ $('Settings').first().json.slack_channel }}"
         },
-        "messageType": "text",
         "text": "={{ `:white_check_mark: *New qualified lead in HubSpot*\\n*${$('Validate lead').first().json.lead.name}*, ${$('Validate lead').first().json.lead.job_title} at ${$('Validate lead').first().json.lead.company}\\n${$('Decide route').first().json.ai ? 'AI score ' + $('Decide route').first().json.ai.fit_score + '/100: ' + $('Decide route').first().json.ai.reason : 'Approved by reviewer (no valid AI result)'}\\nA first reply is being drafted for approval.` }}",
         "otherOptions": {
           "includeLinkToWorkflow": false
@@ -941,9 +908,10 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
-        6500,
-        0
-      ]
+        5600,
+        -80
+      ],
+      "webhookId": "73a0f316-2edd-4c2d-90d1-8de335ca46d6"
     },
     {
       "parameters": {
@@ -954,8 +922,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6760,
-        0
+        5824,
+        -80
       ]
     },
     {
@@ -989,13 +957,13 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        7020,
-        0
+        6048,
+        -80
       ],
-      "onError": "continueErrorOutput",
       "retryOnFail": true,
       "maxTries": 3,
-      "waitBetweenTries": 3000
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1006,8 +974,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        7280,
-        0
+        6272,
+        -160
       ]
     },
     {
@@ -1041,8 +1009,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        7540,
-        0
+        6496,
+        -160
       ]
     },
     {
@@ -1054,13 +1022,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        7800,
-        0
+        6720,
+        -208
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -1071,8 +1038,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -1090,15 +1055,13 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        8060,
-        0
+        6944,
+        -208
       ]
     },
     {
       "parameters": {
-        "resource": "message",
         "operation": "sendAndWait",
-        "authentication": "accessToken",
         "select": "channel",
         "channelId": {
           "__rl": true,
@@ -1106,7 +1069,6 @@
           "value": "={{ $('Settings').first().json.slack_channel }}"
         },
         "message": "={{ $('Check reply draft').first().json.approval_text }}",
-        "responseType": "approval",
         "approvalOptions": {
           "values": {
             "approvalType": "double",
@@ -1117,9 +1079,7 @@
         "options": {
           "limitWaitTime": {
             "values": {
-              "limitType": "afterTimeInterval",
-              "resumeAmount": 24,
-              "resumeUnit": "hours"
+              "resumeAmount": 24
             }
           },
           "appendAttribution": false
@@ -1130,8 +1090,8 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
-        8320,
-        0
+        7168,
+        -208
       ],
       "webhookId": "f788fb6c-6219-402b-b35e-71edcbce9933"
     },
@@ -1166,8 +1126,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        8580,
-        0
+        7392,
+        -208
       ]
     },
     {
@@ -1179,8 +1139,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        8840,
-        -150
+        7616,
+        -304
       ]
     },
     {
@@ -1214,13 +1174,12 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        9100,
-        -150
+        7840,
+        -304
       ]
     },
     {
       "parameters": {
-        "operation": "send",
         "fromEmail": "={{ $('Settings').first().json.from_email }}",
         "toEmail": "={{ $('Recipient').first().json.to }}",
         "subject": "={{ ($('Settings').first().json.demo_mode ? '[DEMO for ' + $('Validate lead').first().json.lead.email + '] ' : '') + $('Check reply draft').first().json.subject }}",
@@ -1235,12 +1194,13 @@
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        9360,
-        -250
+        8064,
+        -400
       ],
       "retryOnFail": true,
       "maxTries": 3,
-      "waitBetweenTries": 3000
+      "waitBetweenTries": 3000,
+      "webhookId": "e2516414-4511-4d73-8730-0cefbdd8df3c"
     },
     {
       "parameters": {
@@ -1251,13 +1211,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        9620,
-        -250
+        8288,
+        -400
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -1268,8 +1227,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -1287,8 +1244,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        9880,
-        -250
+        8512,
+        -400
       ]
     },
     {
@@ -1300,13 +1257,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        9360,
-        -50
+        8064,
+        -208
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -1317,8 +1273,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -1336,8 +1290,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        9620,
-        -50
+        8288,
+        -208
       ]
     },
     {
@@ -1349,13 +1303,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        8840,
-        150
+        7616,
+        -112
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -1366,8 +1319,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -1385,8 +1336,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        9100,
-        150
+        7840,
+        -112
       ]
     },
     {
@@ -1398,13 +1349,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5980,
-        400
+        5152,
+        112
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -1415,8 +1365,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -1434,22 +1382,18 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        6240,
-        400
+        5376,
+        112
       ]
     },
     {
       "parameters": {
-        "resource": "message",
-        "operation": "post",
-        "authentication": "accessToken",
         "select": "channel",
         "channelId": {
           "__rl": true,
           "mode": "name",
           "value": "={{ $('Settings').first().json.slack_channel }}"
         },
-        "messageType": "text",
         "text": "={{ `:rotating_light: *HubSpot write failed* for ${$('Validate lead').first().json.lead.email} (log row ${$('Log: new lead').first().json.id}). Please add the contact by hand. Error: ${$('Row: CRM failed').first().json.error}` }}",
         "otherOptions": {
           "includeLinkToWorkflow": false
@@ -1460,9 +1404,10 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
-        6500,
-        400
-      ]
+        5600,
+        112
+      ],
+      "webhookId": "0bc9d569-3620-4b6c-8e98-7850dcab90d3"
     },
     {
       "parameters": {
@@ -1473,13 +1418,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        7800,
-        400
+        6720,
+        16
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -1490,8 +1434,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -1509,22 +1451,18 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        8060,
-        400
+        6944,
+        16
       ]
     },
     {
       "parameters": {
-        "resource": "message",
-        "operation": "post",
-        "authentication": "accessToken",
         "select": "channel",
         "channelId": {
           "__rl": true,
           "mode": "name",
           "value": "={{ $('Settings').first().json.slack_channel }}"
         },
-        "messageType": "text",
         "text": "={{ `:warning: Reply draft failed for ${$('Validate lead').first().json.lead.email} (log row ${$('Log: new lead').first().json.id}). The contact is in HubSpot; please reply by hand. Error: ${$('Row: draft failed').first().json.error}` }}",
         "otherOptions": {
           "includeLinkToWorkflow": false
@@ -1535,9 +1473,10 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
-        8320,
-        400
-      ]
+        7168,
+        16
+      ],
+      "webhookId": "42044034-022c-49a7-b50d-31884216def5"
     },
     {
       "parameters": {
@@ -1548,13 +1487,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3120,
+        2688,
         400
       ]
     },
     {
       "parameters": {
-        "resource": "row",
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -1565,8 +1503,6 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "id",
-              "condition": "eq",
               "keyValue": "={{ $('Log: new lead').first().json.id }}"
             }
           ]
@@ -1584,22 +1520,18 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        3380,
+        2912,
         400
       ]
     },
     {
       "parameters": {
-        "resource": "message",
-        "operation": "post",
-        "authentication": "accessToken",
         "select": "channel",
         "channelId": {
           "__rl": true,
           "mode": "name",
           "value": "={{ $('Settings').first().json.slack_channel }}"
         },
-        "messageType": "text",
         "text": "={{ `:rotating_light: *Lead scoring failed after 3 tries*\\nLead: ${$('Validate lead').first().json.lead.email} (log row ${$('Log: new lead').first().json.id})\\nNothing was written to HubSpot. Error: ${$('Row: AI call failed').first().json.error}` }}",
         "otherOptions": {
           "includeLinkToWorkflow": false
@@ -1610,9 +1542,10 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
-        3640,
+        3136,
         400
-      ]
+      ],
+      "webhookId": "d043b9fc-5634-49f3-84ce-f81e120a0cc4"
     },
     {
       "parameters": {
@@ -1625,7 +1558,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        3900,
+        3360,
         400
       ]
     }
@@ -2284,9 +2217,10 @@
   "settings": {
     "executionOrder": "v1",
     "errorWorkflow": "Q116ErrorAlert01",
-    "saveManualExecutions": true
+    "saveManualExecutions": true,
+    "binaryMode": "separate"
   },
-  "active": false,
   "pinData": {},
-  "tags": []
+  "tags": [],
+  "active": false
 }

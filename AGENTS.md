@@ -32,6 +32,8 @@ Starting points, not exhaustive reading lists.
 | Understand or explain the system | `README.md` |
 | Current status or open decisions | `STATE.md` |
 | Documentation / README / ADR work | the artifact itself; `.githooks/validate_artifacts.py` for enforced structure |
+| n8n workflow behaviour | `workflows/lead-qualifier.json` (exported from n8n; credentials stripped) |
+| Test set, runner, results | `tests/leads.json`, `tests/run_tests.py`, `tests/results/` |
 
 ## Always-on constraints
 
