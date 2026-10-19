@@ -76,6 +76,16 @@ SITES = {
         "Contract laboratory services for biotech companies. 70 staff in Cambridge, UK."),
     "copperfield-energy.example.com": ("Copperfield Energy",
         "Maintenance and field services for solar and wind sites. 90 employees in Spain and Portugal."),
+    # Demo leads for the Loom recording (tests/demo.py), not part of the 39-lead test set.
+    "brightline-facilities.example.com": ("Brightline Facilities",
+        "Facility management for offices and retail parks: cleaning, maintenance and repairs. "
+        "120 employees in Zagreb and Ljubljana. 400 business clients send us service requests every day."),
+    "alder-finch.example.com": ("Alder & Finch Architects",
+        "Architecture and interior design for offices and housing. 60 people in Graz. "
+        "We manage 40 to 50 building projects at a time."),
+    "kestrel-print.example.com": ("Kestrel Print Solutions",
+        "Commercial printing and packaging for retailers. 50 employees in Leeds. "
+        "Orders arrive by email, phone and our web shop."),
 }
 
 
