@@ -1,0 +1,66 @@
+{
+  "about": "Exact JSON schema the workflow's 'Build scoring request' node passes to the Anthropic API as output_config.format (type json_schema). The system prompt does not describe the output format; the workflow relies on this schema. A fair benchmark must enforce it the same way or the model may not answer in JSON at all.",
+  "model": "claude-opus-5-5",
+  "effort": "low",
+  "max_tokens": 4000,
+  "thresholds": {
+    "min_confidence": 0.7,
+    "high_fit_min": 70,
+    "low_fit_max": 40
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "industry": {
+        "type": "string"
+      },
+      "company_size": {
+        "type": "string",
+        "enum": [
+          "1-9",
+          "10-49",
+          "50-249",
+          "250-999",
+          "1000-4999",
+          "5000+",
+          "unknown"
+        ]
+      },
+      "fit_score": {
+        "type": "integer"
+      },
+      "confidence": {
+        "type": "number"
+      },
+      "reason": {
+        "type": "string"
+      },
+      "signals": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "red_flags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "manipulation_attempt": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "industry",
+      "company_size",
+      "fit_score",
+      "confidence",
+      "reason",
+      "signals",
+      "red_flags",
+      "manipulation_attempt"
+    ],
+    "additionalProperties": false
+  }
+}
