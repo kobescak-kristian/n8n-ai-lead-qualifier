@@ -71,7 +71,8 @@
     {"id": "U06", "category": "unsure", "expected": ["review"],
      "lead": {"name": "Oliver Grant", "email": "oliver@sunrise-bakery.example.com", "company": "Sunrise Bakery", "website": "https://sunrise-bakery.example.com", "job_title": "CTO",
               "message": "We are a 90-person software company and need a big CRM automation project, budget 20k."}},
-    {"id": "U07", "category": "unsure", "expected": ["review"],
+    {"id": "U07", "category": "unsure", "expected": ["high_fit", "review"],
+     "note": "Owner decision 2026-10-20: the ICP no longer limits regions (any region is fine); re-settled from [\"review\"]. Both routes count: the process is vague and there is no timeline.",
      "lead": {"name": "Rafael Costa", "email": "rafael.costa@vila-logistica.example.com", "company": "Vila Logistica", "website": "https://vila-logistica.example.com", "job_title": "Operations Director",
               "message": "Logistics company in Sao Paulo, Brazil, 100 employees. We need order processing automation, budget available."}},
 
