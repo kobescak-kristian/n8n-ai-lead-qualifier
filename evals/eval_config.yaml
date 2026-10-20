@@ -1,8 +1,9 @@
 # Eval gate for the final gated series of the n8n AI lead qualifier (Q-116).
 # Procedure: eval-gate skill (EVAL_STANDARD v1.1). Owner test standard:
 # career/domains/career/UPWORK_LAUNCH_PLAN.md, 2026-10-18.
-# STATUS: DRAFT. Frozen only when the owner has set "Decided" below and the
-# file is committed; the commit hash then goes into STATE.md.
+# STATUS: level decided by the owner 2026-10-20; frozen from the commit that
+# records it (hash goes into STATE.md). Hold-out cases are added by their
+# sealed commitment before the gated series (adding cases is allowed).
 
 eval_level:
   proposed: >-
@@ -12,7 +13,7 @@ eval_level:
     named critical failures. One level up when unsure (eval-gate section 1).
     Alternative: Standard, if the owner judges the approval step itself as the
     human check.
-  decided: null   # owner, with date
+  decided: "Critical, owner, 2026-10-20"
 
 system_under_test:
   workflow: workflows/lead-qualifier.json (version = repo commit named in the results entry)
@@ -79,7 +80,7 @@ secondary_metrics_not_gated:
   - cases that change route between runs (reported by case ID)
 
 not_claimed:
-  - reply-draft quality (not measured; the README says so)
+  - reply-draft quality (not measured; the README says so; owner decision 2026-10-20)
 
 comparison_policy: >-
     Exact string match of the route field against the expected list. No
