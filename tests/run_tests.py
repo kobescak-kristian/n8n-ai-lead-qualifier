@@ -2,15 +2,24 @@
 
 Step 1 - send all leads (needs n8n and the mock sites running):
     python tests/run_tests.py send
+    python tests/run_tests.py send --leads tests/leads.json --leads <other.json> --tag r1
+  --leads (repeatable) picks the lead files, default tests/leads.json.
+  --tag adds ".<tag>" to every e-mail, so a repeat run is not stopped by the
+  duplicate check; duplicate cases inside one run keep matching each other.
 
 Step 2 - after the Slack reviews are done, build the result report:
     python tests/run_tests.py report tests/results/<run-file>.json
 
-Only the Python standard library is used. Nothing secret is read or written:
-the report endpoint returns the workflow's own lead log and the e-mails
-found in HubSpot, which n8n fetches with the credential stored in n8n.
+Only the Python standard library is used. Both webhooks are protected by
+n8n Header Auth: the keys are read from the environment variables
+LEAD_QUALIFIER_KEY and LEAD_REPORT_KEY, or asked for once (hidden input).
+They are never written to a file. The report endpoint returns the
+workflow's own lead log and the e-mails found in HubSpot, which n8n
+fetches with the credential stored in n8n.
 """
+import getpass
 import json
+import os
 import sys
 import time
 import urllib.error
@@ -25,10 +34,30 @@ RESULTS_DIR = ROOT / "results"
 BASE = "http://localhost:5678"
 LEAD_PATH = "/webhook/lead"
 REPORT_PATH = "/webhook/lead-report"
+KEY_HEADER = "X-Webhook-Key"
+LEAD_KEY = ("LEAD_QUALIFIER_KEY", "Lead form webhook")
+REPORT_KEY = ("LEAD_REPORT_KEY", "Lead report webhook")
+_keys = {}
 
 
-def build_payload(case):
+def auth(key):
+    """Header for a protected webhook. Read from the environment or asked once."""
+    var, label = key
+    if var not in _keys:
+        _keys[var] = os.environ.get(var) or getpass.getpass(f"{label} key ({var}, input hidden): ")
+    return {KEY_HEADER: _keys[var]}
+
+
+def tagged(email, tag):
+    if not tag or "@" not in str(email):
+        return email
+    local, domain = email.split("@", 1)
+    return f"{local}.{tag}@{domain}"
+
+
+def build_payload(case, tag=None):
     lead = dict(case["lead"])
+    lead["email"] = tagged(lead.get("email"), tag)
     msg = lead.get("message")
     if isinstance(msg, dict):  # generated long text
         lead["message"] = msg["repeat"] * msg["times"]
@@ -38,9 +67,9 @@ def build_payload(case):
     return lead
 
 
-def post(url, payload, timeout=120):
+def post(url, payload, timeout=120, headers=None):
     data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json", **(headers or {})})
     start = time.time()
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
@@ -58,12 +87,14 @@ def post(url, payload, timeout=120):
     return status, parsed, seconds
 
 
-def cmd_send(base):
-    cases = json.loads(LEADS_FILE.read_text(encoding="utf-8"))["leads"]
+def cmd_send(base, files, tag):
+    cases = []
+    for f in files:
+        cases += json.loads(Path(f).read_text(encoding="utf-8"))["leads"]
     started = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     rows = []
     for case in cases:
-        status, body, seconds = post(base + LEAD_PATH, build_payload(case))
+        status, body, seconds = post(base + LEAD_PATH, build_payload(case, tag), headers=auth(LEAD_KEY))
         route = body.get("route") if isinstance(body, dict) else None
         rows.append({"id": case["id"], "category": case["category"], "expected": case["expected"],
                      "http_status": status, "route": route, "log_id": body.get("log_id"),
@@ -72,19 +103,21 @@ def cmd_send(base):
         print(f"{mark}{case['id']:4} {case['category']:24} -> {route} ({seconds}s)")
     RESULTS_DIR.mkdir(exist_ok=True)
     out = RESULTS_DIR / f"run-{started}.json"
-    out.write_text(json.dumps({"started_utc": started, "base": base, "rows": rows}, indent=2), encoding="utf-8")
+    out.write_text(json.dumps({"started_utc": started, "base": base, "lead_files": [str(f) for f in files],
+                                "tag": tag, "rows": rows}, indent=2), encoding="utf-8")
     print(f"\nSaved {out.relative_to(ROOT.parent)}")
     print("Now do the Slack reviews, then run: python tests/run_tests.py report", out.relative_to(ROOT.parent))
 
 
-def get(url, timeout=60):
-    with urllib.request.urlopen(url, timeout=timeout) as resp:
+def get(url, timeout=60, headers=None):
+    req = urllib.request.Request(url, headers=headers or {})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
 def cmd_report(run_file, base):
     run = json.loads(Path(run_file).read_text(encoding="utf-8"))
-    report = get(base + REPORT_PATH)
+    report = get(base + REPORT_PATH, headers=auth(REPORT_KEY))
     log = {str(r["id"]): r for r in report.get("log", [])}
     crm_emails = {e.strip().lower() for e in report.get("hubspot_emails", [])}
 
@@ -176,8 +209,17 @@ if __name__ == "__main__":
         i = args.index("--base")
         base = args[i + 1].rstrip("/")
         del args[i:i + 2]
+    files, tag = [], None
+    while "--leads" in args:
+        i = args.index("--leads")
+        files.append(args[i + 1])
+        del args[i:i + 2]
+    if "--tag" in args:
+        i = args.index("--tag")
+        tag = args[i + 1]
+        del args[i:i + 2]
     if args[:1] == ["send"]:
-        cmd_send(base)
+        cmd_send(base, files or [LEADS_FILE], tag)
     elif args[:1] == ["report"] and len(args) == 2:
         cmd_report(args[1], base)
     else:

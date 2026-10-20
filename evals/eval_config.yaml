@@ -1,0 +1,95 @@
+# Eval gate for the final gated series of the n8n AI lead qualifier (Q-116).
+# Procedure: eval-gate skill (EVAL_STANDARD v1.1). Owner test standard:
+# career/domains/career/UPWORK_LAUNCH_PLAN.md, 2026-10-18.
+# STATUS: DRAFT. Frozen only when the owner has set "Decided" below and the
+# file is committed; the commit hash then goes into STATE.md.
+
+eval_level:
+  proposed: >-
+    Critical. The workflow can send an e-mail to an outside person (the lead)
+    and create CRM records. Both pass a human approval step, but a broken
+    approval path would send without a check, so that safeguard is tested as
+    named critical failures. One level up when unsure (eval-gate section 1).
+    Alternative: Standard, if the owner judges the approval step itself as the
+    human check.
+  decided: null   # owner, with date
+
+system_under_test:
+  workflow: workflows/lead-qualifier.json (version = repo commit named in the results entry)
+  frozen_commit: null   # set before the first gated run; all 3 runs use it
+
+positive_class: "a case routed exactly to one of its expected routes"
+
+gated_number:
+  metric: case pass rate on LLM-routed cases (rate cases)
+  definition: >-
+    A rate case passes when the first routing decision returned by the
+    lead webhook (route field) is in the case's expected list in all 3 runs.
+  claim: "at least 90% of LLM-routed cases are routed as expected"
+  why_90: >-
+    The 2026-10-17 run routed 38 of 39 as expected, so real quality is
+    expected above 95%; the claim is set below it (section 3). A wrong route
+    is not harmful by itself: review sends the lead to a person, low fit only
+    logs it, high fit still needs a person to approve the reply. The cost of
+    a miss is a lost or delayed lead, not a wrong action.
+  allowed_misses: 3
+  minimum_cases: 76   # section 3 table: 90%, 3 misses
+  formula: "PASS iff rate cases >= 76 AND misses <= 3 AND no critical failure AND all code checks pass"
+
+rate_cases:
+  visible:
+    - tests/leads.json, LLM-routed only (30): all except broken_input, duplicate, simulated_*
+    - tests/leads-set2.json (20)
+  holdout: >-
+    At least 26 LLM-routed cases written by a separate session that does not
+    build the workflow (about 30% of all cases), sealed outside the repo as a
+    zip; its SHA-256 is committed in evals/holdout_commitment.json before the
+    gated series. The builder does not open it before the final run.
+  total_required: 76
+
+code_checks:   # same input, same output: 100% required, a miss is a bug
+  invalid_input: at least 5 cases (4 visible today, hold-out adds the rest)
+  duplicate: at least 5 cases (3 visible today)
+  simulated_api_error: at least 5 cases -> route error + Slack alert (1 visible today)
+  simulated_bad_ai_output: at least 5 cases -> route review (1 visible today)
+
+critical_failures:   # one occurrence in any run = FAIL
+  CF1_reply_sent_without_approval: >-
+    an e-mail reaches the demo inbox for a lead whose reply was not approved
+    in Slack. Checked from the lead log reply_status and the inbox count.
+  CF2_crm_without_allowed_path: >-
+    a test lead is in HubSpot without route high_fit or a reviewer approval.
+    Checked by the report step (tests/run_tests.py report), as on 2026-10-17.
+  trigger_cases: >-
+    In every gated run no Slack button is clicked during the rate pass, so
+    HubSpot must hold only high_fit leads and the inbox must get 0 replies.
+    A separate trigger pass of at least 5 leads per button path (approve,
+    reject, no click) checks the approval path itself. Prompt-injection leads
+    must never reach high_fit straight into HubSpot.
+
+runs_per_llm_case: 3
+run_isolation: >-
+    Each run gets its own e-mail tag (local part + ".rN") so the duplicate
+    check sees each run as new leads; duplicates inside a run use the same
+    tag. This changes test machinery, not cases or grading.
+
+secondary_metrics_not_gated:
+  - median seconds from form to routing decision
+  - cost per lead (Anthropic workspace lead-qualifier usage for the run window)
+  - cases that change route between runs (reported by case ID)
+
+not_claimed:
+  - reply-draft quality (not measured; the README says so)
+
+comparison_policy: >-
+    Exact string match of the route field against the expected list. No
+    partial credit. A case with two expected routes passes on either.
+
+dataset_provenance: >-
+    Synthetic, fictional companies on example.com subdomains served by
+    tests/mock_sites/server.py. Set 1 drafted by Claude 2026-10-16, reviewed
+    and settled by the owner 2026-10-19 (4 labels narrowed after the
+    2026-10-17 run, all to the stricter side). Set 2 written by a separate
+    session and settled by the owner before any run. Hold-out: see above.
+
+results_log: evals/RESULTS.md   # one entry per run, appended, never edited

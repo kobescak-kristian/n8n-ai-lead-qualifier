@@ -6,7 +6,11 @@ mock_sites_base setting in the Config node is filled in.
 
 Run:  python tests/mock_sites/server.py            (port 8099)
       python tests/mock_sites/server.py 8100       (other port)
+      python tests/mock_sites/server.py --extra <sites.json>
+        adds pages from a file kept outside the repo (hold-out set):
+        {"<domain>": ["<title>", "<page text>"], ...}
 """
+import json
 import sys
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -155,6 +159,12 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8099
+    args = sys.argv[1:]
+    while "--extra" in args:
+        i = args.index("--extra")
+        with open(args[i + 1], encoding="utf-8") as f:
+            SITES.update({d.lower(): tuple(v) for d, v in json.load(f).items()})
+        del args[i:i + 2]
+    port = int(args[0]) if args else 8099
     print(f"Mock sites on http://127.0.0.1:{port}/<domain> ({len(SITES)} sites)")
     ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()

@@ -1,6 +1,7 @@
 """Send three fresh demo leads, one per Enter key, for the Loom recording.
 
-Needs n8n and the mock sites running (same as run_tests.py).
+Needs n8n and the mock sites running (same as run_tests.py). The webhook keys
+come from LEAD_QUALIFIER_KEY and LEAD_REPORT_KEY, or are asked for once (hidden).
 
     python tests/demo.py --check     check only: n8n up, demo pages served,
                                      demo e-mails not used yet. Sends nothing.
@@ -14,9 +15,10 @@ leads a HubSpot contact and a reply to the demo inbox.
 """
 import json
 import sys
+import urllib.error
 import urllib.request
 
-from run_tests import BASE, LEAD_PATH, REPORT_PATH, get, post
+from run_tests import BASE, LEAD_KEY, LEAD_PATH, REPORT_KEY, REPORT_PATH, auth, get, post
 
 MOCK_BASE = "http://127.0.0.1:8099"
 
@@ -91,7 +93,12 @@ def check(leads):
             ok = False
             print(f"mock page:  MISSING {host} ({err}) - restart tests/mock_sites/server.py")
     try:
-        used = {(row.get("email") or "").lower() for row in get(BASE + REPORT_PATH).get("log", [])}
+        report = get(BASE + REPORT_PATH, headers=auth(REPORT_KEY))
+        used = {(row.get("email") or "").lower() for row in report.get("log", [])}
+    except urllib.error.HTTPError as err:
+        hint = " - wrong or missing report key" if err.code in (401, 403) else ""
+        print(f"lead log:   NOT READABLE (HTTP {err.code}{hint})")
+        return False
     except Exception as err:
         print(f"lead log:   NOT READABLE ({err})")
         return False
@@ -122,6 +129,7 @@ def main():
     if "--check" in args:
         print("\nReady. Nothing was sent.")
         return
+    auth(LEAD_KEY)  # ask for the form key now, not in the middle of the recording
 
     for i, d in enumerate(leads, 1):
         lead = d["lead"]
@@ -130,7 +138,7 @@ def main():
         print(f"  {lead['name']}, {lead['job_title']}, {lead['company']}")
         print(f"  {lead['message']}")
         input("\nPress Enter to submit this form... ")
-        status, body, seconds = post(BASE + LEAD_PATH, dict(lead, source="demo"))
+        status, body, seconds = post(BASE + LEAD_PATH, dict(lead, source="demo"), headers=auth(LEAD_KEY))
         print(f"\n  Route:      {body.get('route')}")
         if body.get("fit_score") is not None:
             print(f"  AI score:   {body.get('fit_score')}/100, confidence {body.get('confidence')}")
