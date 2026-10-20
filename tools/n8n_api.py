@@ -153,7 +153,7 @@ def repo_settings():
 
 
 # Nodes whose parameters the repo file decides (credentials stay as they are in n8n).
-REPO_NODES = {"Q116LeadQualify1": ("Decide route", "Respond: routed"),
+REPO_NODES = {"Q116LeadQualify1": ("Build scoring request", "Decide route", "Respond: routed"),
               "Q116LeadReport01": ("HubSpot contacts", "Build report")}
 
 
