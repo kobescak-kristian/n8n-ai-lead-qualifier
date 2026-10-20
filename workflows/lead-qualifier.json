@@ -39,7 +39,7 @@
             {
               "id": "4ca896a7-b88b-45bd-b337-d4ff13963abe",
               "name": "model",
-              "value": "claude-haiku-5-5",
+              "value": "claude-opus-5-5",
               "type": "string"
             },
             {

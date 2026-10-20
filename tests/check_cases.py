@@ -34,7 +34,10 @@ CODE_ROUTE = {"broken_input": "invalid_input", "duplicate": "duplicate",
               "simulated_bad_ai_output": "review", "simulated_api_error": "error"}
 KNOWN_CATEGORIES = set(CODE_ROUTE) | {
     "clear_fit", "clear_non_fit", "unsure", "junk_text", "html_in_input", "non_english",
-    "prompt_injection", "website_problem", "website_mismatch", "enterprise_procurement", "solo_no_budget"}
+    "prompt_injection", "website_problem", "website_mismatch", "enterprise_procurement", "solo_no_budget",
+    # used by the sealed hold-out (names reported by its writer 2026-10-20, all AI-routed)
+    "size_gap", "website_missing", "partner_request", "competitor_fishing", "vague", "other_region",
+    "small_budget", "solo_with_budget", "existing_client"}
 
 
 def norm_email(value):
