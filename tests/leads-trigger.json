@@ -1,6 +1,6 @@
 {
-  "about": "Trigger pass for CF1 and CF2 (evals/eval_config.yaml critical_failures.trigger_cases; gate red team finding 12). Sent alone with its own tag after the 3 rate passes and after the rate series is graded: python tests/run_tests.py send --leads tests/leads-trigger.json --tag t1. Review-path leads (TA-TD) carry the bad_ai_output test flag, so they always go to review; high-fit leads (TE-TG) reuse the message and mock website of a visible clear-fit lead with a new person, so they are routed by the AI and a lead that is not routed high_fit is 'not exercised', not a result. The person in Slack makes exactly the clicks in 'trigger' (python evals/grade_series.py clicks <run file> prints the list); click_twice = click the same button again after the first click (interaction I10): nothing may change. Expected end states follow from the workflow code. All people and companies are fictional.",
-  "labels_reviewed": "Drafted 2026-10-20 after the gate red team; end states follow from the workflow code; owner confirmation pending.",
+  "about": "Trigger pass for CF1 and CF2 (evals/eval_config.yaml critical_failures.trigger_cases; gate red team finding 12). Sent alone with its own tag after the 3 rate passes and after the rate series is graded: python tests/run_tests.py send --leads tests/leads-trigger.json --tag t1. Review-path leads (TA-TD) carry the bad_ai_output test flag, so they always go to review; high-fit leads (TE-TG) reuse the message and mock website of a visible clear-fit lead with a new person, so they are routed by the AI and a lead that is not routed high_fit is 'not exercised', not a result. The person in Slack makes exactly the clicks in 'trigger' (python evals/grade_series.py clicks <run file> prints the list); click_twice (TA1, TC1) says exactly which button to click a second time and when (interaction I10). High-fit paths have 7 leads each: at least 5 per path must be exercised (routed high_fit, reply draft written); a lead the AI routes elsewhere, or whose draft fails its check, is noted as not exercised, not graded. Expected end states follow from the workflow code. All people and companies are fictional.",
+  "labels_reviewed": "End states follow from the workflow code; confirmed by the owner 2026-10-20; 6 high-fit leads (TE6-7, TF6-7, TG6-7) added after the second gate red team (finding 9).",
   "routes": [
     "high_fit",
     "low_fit",
@@ -31,7 +31,7 @@
         "reply_click": "send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": true
+        "click_twice": "After the reply message appears, click the review Approve button again. Check that nothing new happens (no second HubSpot note, the reply message still waits). Then click Send."
       }
     },
     {
@@ -55,7 +55,7 @@
         "reply_click": "send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -79,7 +79,7 @@
         "reply_click": "send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -103,7 +103,7 @@
         "reply_click": "send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -127,7 +127,7 @@
         "reply_click": "send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -151,7 +151,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -175,7 +175,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -199,7 +199,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -223,7 +223,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -247,7 +247,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -271,7 +271,7 @@
         "reply_click": null,
         "expect_final_status": "review_rejected",
         "expect_reply_status": "",
-        "click_twice": true
+        "click_twice": "Click Reject again after the first click. Nothing may change."
       }
     },
     {
@@ -295,7 +295,7 @@
         "reply_click": null,
         "expect_final_status": "review_rejected",
         "expect_reply_status": "",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -319,7 +319,7 @@
         "reply_click": null,
         "expect_final_status": "review_rejected",
         "expect_reply_status": "",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -343,7 +343,7 @@
         "reply_click": null,
         "expect_final_status": "review_rejected",
         "expect_reply_status": "",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -367,7 +367,7 @@
         "reply_click": null,
         "expect_final_status": "review_rejected",
         "expect_reply_status": "",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -391,7 +391,7 @@
         "reply_click": null,
         "expect_final_status": "review_pending",
         "expect_reply_status": "",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -415,7 +415,7 @@
         "reply_click": null,
         "expect_final_status": "review_pending",
         "expect_reply_status": "",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -439,7 +439,7 @@
         "reply_click": null,
         "expect_final_status": "review_pending",
         "expect_reply_status": "",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -463,7 +463,7 @@
         "reply_click": null,
         "expect_final_status": "review_pending",
         "expect_reply_status": "",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -487,7 +487,7 @@
         "reply_click": null,
         "expect_final_status": "review_pending",
         "expect_reply_status": "",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -510,7 +510,7 @@
         "reply_click": "send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -533,7 +533,7 @@
         "reply_click": "send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -556,7 +556,7 @@
         "reply_click": "send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -579,7 +579,7 @@
         "reply_click": "send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -602,7 +602,53 @@
         "reply_click": "send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": false
+        "click_twice": null
+      }
+    },
+    {
+      "id": "TE6",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Jana Kos",
+        "email": "jana.kos@clearpath-software.example.com",
+        "company": "Clearpath Software",
+        "website": "https://clearpath-software.example.com",
+        "job_title": "Head of Sales",
+        "message": "Our SDR team spends hours qualifying inbound demo requests by hand. We want AI scoring of new leads pushed into HubSpot. Budget around 5-8k EUR, decision this month."
+      },
+      "trigger": {
+        "path": "high fit + reply Send",
+        "review_click": null,
+        "reply_click": "send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": null
+      }
+    },
+    {
+      "id": "TE7",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Marek Lind",
+        "email": "marek.lind@lumen-dental.example.com",
+        "company": "Lumen Dental Group",
+        "website": "https://lumen-dental.example.com",
+        "job_title": "COO",
+        "message": "We run 12 clinics. Patient intake forms and appointment reminders are still manual across all of them. Looking for a partner to automate this, start next month."
+      },
+      "trigger": {
+        "path": "high fit + reply Send",
+        "review_click": null,
+        "reply_click": "send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": null
       }
     },
     {
@@ -625,7 +671,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -648,7 +694,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -671,7 +717,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -694,7 +740,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -717,7 +763,53 @@
         "reply_click": "dont_send",
         "expect_final_status": "crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": false
+        "click_twice": null
+      }
+    },
+    {
+      "id": "TF6",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Sofie Brandt",
+        "email": "sofie.brandt@verde-home.example.com",
+        "company": "Verde Home",
+        "website": "https://verde-home.example.com",
+        "job_title": "E-commerce Director",
+        "message": "Shopify brand, 60 staff. We want AI triage of customer service emails and automatic handling of order exceptions. Budget up to 10k EUR, want to start in November."
+      },
+      "trigger": {
+        "path": "high fit + reply Don't send",
+        "review_click": null,
+        "reply_click": "dont_send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": null
+      }
+    },
+    {
+      "id": "TF7",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Viktor Hahn",
+        "email": "viktor.hahn@summit-accounting.example.com",
+        "company": "Summit Accounting Partners",
+        "website": "https://summit-accounting.example.com",
+        "job_title": "IT Manager",
+        "message": "120-person accounting firm. Clients send invoices and receipts by email; we want the data extracted and posted into Xero automatically. Please send a proposal this week."
+      },
+      "trigger": {
+        "path": "high fit + reply Don't send",
+        "review_click": null,
+        "reply_click": "dont_send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": null
       }
     },
     {
@@ -740,7 +832,7 @@
         "reply_click": null,
         "expect_final_status": "crm_created",
         "expect_reply_status": "awaiting_approval",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -763,7 +855,7 @@
         "reply_click": null,
         "expect_final_status": "crm_created",
         "expect_reply_status": "awaiting_approval",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -786,7 +878,7 @@
         "reply_click": null,
         "expect_final_status": "crm_created",
         "expect_reply_status": "awaiting_approval",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -809,7 +901,7 @@
         "reply_click": null,
         "expect_final_status": "crm_created",
         "expect_reply_status": "awaiting_approval",
-        "click_twice": false
+        "click_twice": null
       }
     },
     {
@@ -832,7 +924,53 @@
         "reply_click": null,
         "expect_final_status": "crm_created",
         "expect_reply_status": "awaiting_approval",
-        "click_twice": false
+        "click_twice": null
+      }
+    },
+    {
+      "id": "TG6",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Eva Pirc",
+        "email": "eva.pirc@beacon-hr.example.com",
+        "company": "Beacon HR",
+        "website": "https://beacon-hr.example.com",
+        "job_title": "Head of Customer Success",
+        "message": "HR SaaS, 150 employees. We need a churn-risk alert: read support tickets, flag unhappy accounts in HubSpot and alert the account owner in Slack. Have budget for Q4."
+      },
+      "trigger": {
+        "path": "high fit + reply no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "awaiting_approval",
+        "click_twice": null
+      }
+    },
+    {
+      "id": "TG7",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Goran Juric",
+        "email": "goran.juric@keystone-brokers.example.com",
+        "company": "Keystone Insurance Brokers",
+        "website": "https://keystone-brokers.example.com",
+        "job_title": "VP Operations",
+        "message": "200 staff. Renewal reminders and quote requests are handled in spreadsheets. We want an automated workflow with our CRM. Budget approved, timeline 6 weeks."
+      },
+      "trigger": {
+        "path": "high fit + reply no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "awaiting_approval",
+        "click_twice": null
       }
     }
   ]

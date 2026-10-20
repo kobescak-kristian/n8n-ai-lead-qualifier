@@ -106,17 +106,26 @@ def file_sha256(path):
     return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
+def file_key(path):
+    """Repo-relative POSIX path for a file in the repo (same text from any shell), else the absolute POSIX path."""
+    full = Path(path).resolve()
+    try:
+        return full.relative_to(ROOT.parent).as_posix()
+    except ValueError:
+        return full.as_posix()
+
+
 def version_info(files):
-    """What this run tests: repo commit, clean or not, lead file hashes, model, live n8n = repo files."""
-    import hashlib
+    """What this run tests: repo commit, tracked changes or not, lead file hashes, model, live n8n = repo files."""
     import subprocess
     repo = ROOT.parent
 
     def git(*a):
         r = subprocess.run(["git", *a], cwd=repo, capture_output=True, text=True)
         return r.stdout.strip() if r.returncode == 0 else None
-    info = {"commit": git("rev-parse", "HEAD"), "dirty": bool(git("status", "--porcelain")),
-            "lead_file_sha256": {str(f): file_sha256(f) for f in files}}
+    # Only tracked files count: the run files written by this runner are untracked.
+    info = {"commit": git("rev-parse", "HEAD"), "dirty": bool(git("status", "--porcelain", "--untracked-files=no")),
+            "lead_file_sha256": {file_key(f): file_sha256(f) for f in files}}
     try:
         sys.path.insert(0, str(repo / "tools"))
         import n8n_api
@@ -146,7 +155,9 @@ def cmd_send(base, files, tag):
         print(f"{mark}{case['id']:4} {case['category']:24} -> {route} ({seconds}s)")
     RESULTS_DIR.mkdir(exist_ok=True)
     out = RESULTS_DIR / f"run-{started}.json"
-    out.write_text(json.dumps({"started_utc": started, "base": base, "lead_files": [str(f) for f in files],
+    finished = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    out.write_text(json.dumps({"started_utc": started, "finished_utc": finished, "base": base,
+                                "lead_files": [file_key(f) for f in files],
                                 "tag": tag, "version": version, "rows": rows}, indent=2), encoding="utf-8")
     print(f"\nSaved {out.relative_to(ROOT.parent)}")
     print("Now do the Slack reviews, then run: python tests/run_tests.py report", out.relative_to(ROOT.parent))

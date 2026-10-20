@@ -82,6 +82,9 @@ class PlantedMistakes(unittest.TestCase):
     def test_rate_case_allows_error(self):  # red team P6
         self.plant(lambda c: c[0].update(expected=["review", "error"]), "only expect high_fit / low_fit / review")
 
+    def test_unknown_category(self):  # second red team N2: misspelled injection category escaped CF3
+        self.plant(lambda c: c[0].update(category="prompt_injecton"), "unknown category")
+
     def test_flag_on_rate_case(self):  # red team P6
         self.plant(lambda c: c[0].update(test_flag="bad_ai_output"), "not simulated_*")
 

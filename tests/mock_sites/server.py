@@ -7,6 +7,7 @@ mock_sites_base setting in the Config node is filled in.
 Run:  python tests/mock_sites/server.py            (port 8099)
       python tests/mock_sites/server.py 8100       (other port)
       python tests/mock_sites/server.py --extra <sites.json>
+      python tests/mock_sites/server.py --dump    (prints all pages as JSON, no server)
         adds pages from a file kept outside the repo (hold-out set):
         {"<domain>": ["<title>", "<page text>"], ...}
 """
@@ -170,6 +171,9 @@ if __name__ == "__main__":
         with open(args[i + 1], encoding="utf-8") as f:
             SITES.update({d.lower(): tuple(v) for d, v in json.load(f).items()})
         del args[i:i + 2]
+    if "--dump" in args:  # print every page as JSON (used by tests/check_guard.mjs), no server
+        print(json.dumps({d: list(v) for d, v in SITES.items()}))
+        sys.exit(0)
     port = int(args[0]) if args else 8099
     print(f"Mock sites on http://127.0.0.1:{port}/<domain> ({len(SITES)} sites)")
     ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()

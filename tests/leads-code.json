@@ -1,6 +1,6 @@
 {
   "about": "Code-path cases added 2026-10-20 before any gated run (eval-gate build checks (a) and (b)). They make every code check in evals/eval_config.yaml reach its minimum of 5 cases from the visible set alone, and add two interaction cases from evals/INTERACTION_SWEEP.md. No case here is routed by the AI: each expected route follows from the workflow's own code (Validate lead, Find earlier lead, test flags). Send after tests/leads.json and tests/leads-set2.json (C05 needs X01 first, C13 needs S2F01). All people and companies are fictional; e-mails use example.com subdomains; no website is given, so no mock page is needed.",
-  "labels_reviewed": "Mechanical code-path routes, drafted 2026-10-20; C04 corrected and C13 added after the gate red team (evals/redteam-gate-2026-10-20.md, finding 13), before any run; owner confirmation pending.",
+  "labels_reviewed": "Mechanical code-path routes; C04 corrected and C13 added after the gate red team (finding 13), before any run; confirmed by the owner 2026-10-20.",
   "routes": [
     "high_fit",
     "low_fit",

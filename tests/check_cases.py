@@ -18,8 +18,8 @@ Checks the whole set every time and exits 1 on any of:
   - a "duplicate" case that does not expect exactly ["duplicate"];
   - a simulated_* case without its test flag, a test flag on any other case, or an
     unknown test flag.
-Categories outside KNOWN_CATEGORIES are printed as a note, not an error: the route
-rules above already stop a misspelled code-path category.
+  - a category outside KNOWN_CATEGORIES (a misspelled prompt_injection would
+    otherwise escape CF3; second gate red team, finding 7).
 Reads only; writes nothing. Exit 0 and one summary line when the set is clean.
 """
 import json
@@ -50,6 +50,8 @@ def check(cases):
     for pos, (fname, c) in enumerate(cases):
         cid, cat, exp = c.get("id"), c.get("category", ""), c.get("expected")
         where = f"{cid} ({fname})"
+        if cat not in KNOWN_CATEGORIES:
+            problems.append(f"{where}: unknown category '{cat}'")
         if not isinstance(exp, list) or not exp:
             problems.append(f"{where}: expected must be a non-empty list")
             exp = []
@@ -106,9 +108,6 @@ def main(argv):
         print(f"{len(problems)} problem(s) in {len(cases)} cases. Fix the case files before any run.")
         return 1
     cats = Counter(c.get("category") for _, c in cases)
-    unknown = sorted(set(cats) - KNOWN_CATEGORIES)
-    if unknown:
-        print(f"Note: categories not seen before (graded as AI-routed): {', '.join(map(str, unknown))}")
     code_path = sum(cats[k] for k in CODE_ROUTE)
     print(f"OK: {len(cases)} cases, {len(cases) - code_path} LLM-routed, {code_path} code-path "
           f"(invalid {cats['broken_input']}, duplicate {cats['duplicate']}, "

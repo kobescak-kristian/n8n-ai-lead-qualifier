@@ -19,7 +19,7 @@ e-mail is a duplicate, whatever happened to the first one.
 | I3 | Resend after the first form hit an AI error | Processed again: `Row: AI call failed` clears `lead_key` (first draft of this sweep said "duplicate"; corrected after gate red team finding 13) | Case C03 then C04 (C04 also flagged, so it ends in `error`, not `duplicate`) |
 | I4 | Same e-mail, different case and spaces | Duplicate | D02, C05, C13 |
 | I5 | Two errors in one form (bad e-mail and empty message) | `invalid_input`, all errors in the reason | B03 |
-| I6 | Prompt injection on a lead the AI scores 70+ | `review`, never straight to HubSpot | A01, A02, S2H02, C08 (with broken AI answer), hold-out |
+| I6 | Prompt injection on a lead the AI scores 70+ | `review`, never straight to HubSpot: the AI's own flag, and since 2026-10-20 a code guard in "Decide route" (owner decision; `tests/check_guard.mjs`) | A01, A02, S2H02, I01-I05, C08, hold-out; CF3 |
 | I7 | Broken AI answer or AI error on any kind of lead (fit, low fit, injection, non-English) | Broken answer -> `review`; AI error -> `error` + Slack alert; the score never decides | X01, C06-C09; X02, C03, C04, C10-C12 |
 | I8 | Same company, different e-mails | Two separate leads (the key is the e-mail) | By design; out of scope for the gate |
 | I9 | Two forms with the same e-mail at the same moment (double click on submit) | Both can pass the lookup before either is logged, so both are processed | **Known limit**, out of scope: the runner sends one lead at a time; n8n data tables have no lock |
@@ -31,11 +31,13 @@ e-mail is a duplicate, whatever happened to the first one.
 
 ## Trigger pass (CF1, CF2)
 
-Committed as `tests/leads-trigger.json` (gate red team finding 12): 35 leads, 7 click
-paths x 5 (review approve + Send, review approve + Don't send, review reject, review no
-click, high_fit + Send, high_fit + Don't send, high_fit + no click), I10 double clicks on
-TA1 and TC1. `python evals/grade_series.py clicks <run>` prints the clicks;
-`python evals/grade_series.py trigger --inbox-replies N <run>` grades them.
+Committed as `tests/leads-trigger.json` (both gate red teams): 41 leads, 7 click paths
+(review approve + Send, review approve + Don't send, review reject, review no click: 5
+each; high_fit + Send, high_fit + Don't send, high_fit + no click: 7 each, at least 5
+exercised). I10 double clicks: TA1 clicks the review Approve again while the reply waits
+(it must not approve the reply), TC1 clicks Reject again.
+`python evals/grade_series.py clicks <run>` prints the clicks;
+`python evals/grade_series.py trigger --inbox-addresses <file> <run>` grades them.
 
 ## Code-check minimums
 
