@@ -1,5 +1,5 @@
 {
-  "name": "Q116 Setup: create lead_log table",
+  "name": "n8n-lead-qualifier: setup lead_log table",
   "id": "Q116SetupTable01",
   "nodes": [
     {

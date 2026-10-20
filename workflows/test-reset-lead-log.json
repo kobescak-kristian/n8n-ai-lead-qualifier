@@ -1,5 +1,5 @@
 {
-  "name": "Q116 Test reset: clear lead_log",
+  "name": "n8n-lead-qualifier: test reset lead_log",
   "id": "Q116ResetTable01",
   "nodes": [
     {

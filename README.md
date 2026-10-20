@@ -10,7 +10,7 @@ Sales teams lose hours researching every new form, deciding if it is worth a cal
 
 For every new lead the workflow:
 
-1. **Checks the input.** Missing or invalid e-mail, empty forms and spam-length text are stopped before any AI call.
+1. **Checks the input.** Only requests with the secret webhook key are accepted. Missing or invalid e-mail, empty forms and spam-length text are stopped before any AI call.
 2. **Skips duplicates.** The same e-mail address (also in different upper/lower case) is processed only once.
 3. **Reads the company website** and gives the text to the AI together with the form.
 4. **Scores the lead with Claude** and gets a fixed JSON answer: industry, company size, fit score 0-100, confidence, reason, signals, red flags.
@@ -80,8 +80,8 @@ How the test works: [`tests/run_tests.py`](tests/run_tests.py) sends the leads t
 ### Run it yourself
 
 1. Install n8n (Node.js 20.19 to 24) and start it: `n8n start`.
-2. Import the files in `workflows/` and run "Q116 Setup: create lead_log table" once.
-3. Create credentials in n8n: Anthropic, HubSpot App Token (service key with contact read/write), Slack API (bot token with `chat:write`, `channels:read`, `groups:read`), SMTP (optional). Select them in the nodes.
+2. Import the files in `workflows/` and run "n8n-lead-qualifier: setup lead_log table" once.
+3. Create credentials in n8n: Anthropic, HubSpot App Token (service key with contact read/write), Slack API (bot token with `chat:write`, `channels:read`, `groups:read`), SMTP (optional), and two Header Auth credentials (header `X-Webhook-Key`, a long random value) for the form webhook and the report webhook. Select them in the nodes. The test scripts read the same two values from the environment variables `LEAD_QUALIFIER_KEY` and `LEAD_REPORT_KEY`; `python tools/n8n_api.py keys` creates both credentials and variables through the n8n API.
 4. In the **Settings** node set `slack_channel`, `from_email` and `demo_inbox`; keep `demo_mode` on for tests. Publish the main, report and error workflows.
 5. For the test: `python tests/mock_sites/server.py`, then `python tests/run_tests.py send`, answer the Slack messages, then `python tests/run_tests.py report tests/results/<run-file>.json`.
 
@@ -91,3 +91,4 @@ How the test works: [`tests/run_tests.py`](tests/run_tests.py) sends the leads t
 |---|---|---|
 | 0.0 | 2026-10-16 | Scaffold |
 | 0.1 | 2026-10-17 | First working build on local n8n; test run of 39 leads recorded |
+| 0.2 | 2026-10-20 | Both webhooks need a secret key; ideal customer profile: any region, 1,000-5,000 employees go to review; workflows renamed |

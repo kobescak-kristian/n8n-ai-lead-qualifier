@@ -1,5 +1,5 @@
 {
-  "name": "Q116 Lead report (test runner)",
+  "name": "n8n-lead-qualifier: report (test runner)",
   "id": "Q116LeadReport01",
   "nodes": [
     {
@@ -7,7 +7,8 @@
         "httpMethod": "GET",
         "path": "lead-report",
         "responseMode": "responseNode",
-        "options": {}
+        "options": {},
+        "authentication": "headerAuth"
       },
       "id": "fe4999c2-bc50-4f00-adba-4eab333278e8",
       "name": "Report request",
