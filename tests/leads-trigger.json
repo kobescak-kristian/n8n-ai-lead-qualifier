@@ -1,0 +1,839 @@
+{
+  "about": "Trigger pass for CF1 and CF2 (evals/eval_config.yaml critical_failures.trigger_cases; gate red team finding 12). Sent alone with its own tag after the 3 rate passes and after the rate series is graded: python tests/run_tests.py send --leads tests/leads-trigger.json --tag t1. Review-path leads (TA-TD) carry the bad_ai_output test flag, so they always go to review; high-fit leads (TE-TG) reuse the message and mock website of a visible clear-fit lead with a new person, so they are routed by the AI and a lead that is not routed high_fit is 'not exercised', not a result. The person in Slack makes exactly the clicks in 'trigger' (python evals/grade_series.py clicks <run file> prints the list); click_twice = click the same button again after the first click (interaction I10): nothing may change. Expected end states follow from the workflow code. All people and companies are fictional.",
+  "labels_reviewed": "Drafted 2026-10-20 after the gate red team; end states follow from the workflow code; owner confirmation pending.",
+  "routes": [
+    "high_fit",
+    "low_fit",
+    "review",
+    "invalid_input",
+    "duplicate",
+    "error"
+  ],
+  "leads": [
+    {
+      "id": "TA1",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Mila Horvat",
+        "email": "mila.horvat@horvat-group-a1.example.com",
+        "company": "Horvat Group A1",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Logistics firm, 90 staff. We want order e-mails entered into our ERP automatically. Budget approved."
+      },
+      "trigger": {
+        "path": "review approve + reply Send",
+        "review_click": "approve",
+        "reply_click": "send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": true
+      }
+    },
+    {
+      "id": "TA2",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Jonas Novak",
+        "email": "jonas.novak@novak-group-a2.example.com",
+        "company": "Novak Group A2",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Accounting office, 40 staff. We want receipts from clients read and booked automatically."
+      },
+      "trigger": {
+        "path": "review approve + reply Send",
+        "review_click": "approve",
+        "reply_click": "send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TA3",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Petra Kraus",
+        "email": "petra.kraus@kraus-group-a3.example.com",
+        "company": "Kraus Group A3",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Online shop, 25 staff. Customer e-mails should be sorted and answered faster."
+      },
+      "trigger": {
+        "path": "review approve + reply Send",
+        "review_click": "approve",
+        "reply_click": "send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TA4",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Aron Berg",
+        "email": "aron.berg@berg-group-a4.example.com",
+        "company": "Berg Group A4",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Clinic group, 6 clinics. Appointment requests by e-mail should be booked automatically."
+      },
+      "trigger": {
+        "path": "review approve + reply Send",
+        "review_click": "approve",
+        "reply_click": "send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TA5",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Lucia Moreno",
+        "email": "lucia.moreno@moreno-group-a5.example.com",
+        "company": "Moreno Group A5",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Hotel group, 4 hotels. Booking changes by e-mail are typed by hand; we want this automated."
+      },
+      "trigger": {
+        "path": "review approve + reply Send",
+        "review_click": "approve",
+        "reply_click": "send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TB1",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Dario Ricci",
+        "email": "dario.ricci@ricci-group-b1.example.com",
+        "company": "Ricci Group B1",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Logistics firm, 90 staff. We want order e-mails entered into our ERP automatically. Budget approved."
+      },
+      "trigger": {
+        "path": "review approve + reply Don't send",
+        "review_click": "approve",
+        "reply_click": "dont_send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TB2",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Hanna Lund",
+        "email": "hanna.lund@lund-group-b2.example.com",
+        "company": "Lund Group B2",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Accounting office, 40 staff. We want receipts from clients read and booked automatically."
+      },
+      "trigger": {
+        "path": "review approve + reply Don't send",
+        "review_click": "approve",
+        "reply_click": "dont_send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TB3",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Ivo Kovac",
+        "email": "ivo.kovac@kovac-group-b3.example.com",
+        "company": "Kovac Group B3",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Online shop, 25 staff. Customer e-mails should be sorted and answered faster."
+      },
+      "trigger": {
+        "path": "review approve + reply Don't send",
+        "review_click": "approve",
+        "reply_click": "dont_send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TB4",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Sara Weber",
+        "email": "sara.weber@weber-group-b4.example.com",
+        "company": "Weber Group B4",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Clinic group, 6 clinics. Appointment requests by e-mail should be booked automatically."
+      },
+      "trigger": {
+        "path": "review approve + reply Don't send",
+        "review_click": "approve",
+        "reply_click": "dont_send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TB5",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Teo Marin",
+        "email": "teo.marin@marin-group-b5.example.com",
+        "company": "Marin Group B5",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Hotel group, 4 hotels. Booking changes by e-mail are typed by hand; we want this automated."
+      },
+      "trigger": {
+        "path": "review approve + reply Don't send",
+        "review_click": "approve",
+        "reply_click": "dont_send",
+        "expect_final_status": "review_approved_crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TC1",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Nika Vidal",
+        "email": "nika.vidal@vidal-group-c1.example.com",
+        "company": "Vidal Group C1",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Logistics firm, 90 staff. We want order e-mails entered into our ERP automatically. Budget approved."
+      },
+      "trigger": {
+        "path": "review Reject",
+        "review_click": "reject",
+        "reply_click": null,
+        "expect_final_status": "review_rejected",
+        "expect_reply_status": "",
+        "click_twice": true
+      }
+    },
+    {
+      "id": "TC2",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Filip Holm",
+        "email": "filip.holm@holm-group-c2.example.com",
+        "company": "Holm Group C2",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Accounting office, 40 staff. We want receipts from clients read and booked automatically."
+      },
+      "trigger": {
+        "path": "review Reject",
+        "review_click": "reject",
+        "reply_click": null,
+        "expect_final_status": "review_rejected",
+        "expect_reply_status": "",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TC3",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Ema Basic",
+        "email": "ema.basic@basic-group-c3.example.com",
+        "company": "Basic Group C3",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Online shop, 25 staff. Customer e-mails should be sorted and answered faster."
+      },
+      "trigger": {
+        "path": "review Reject",
+        "review_click": "reject",
+        "reply_click": null,
+        "expect_final_status": "review_rejected",
+        "expect_reply_status": "",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TC4",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Luka Roth",
+        "email": "luka.roth@roth-group-c4.example.com",
+        "company": "Roth Group C4",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Clinic group, 6 clinics. Appointment requests by e-mail should be booked automatically."
+      },
+      "trigger": {
+        "path": "review Reject",
+        "review_click": "reject",
+        "reply_click": null,
+        "expect_final_status": "review_rejected",
+        "expect_reply_status": "",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TC5",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Vera Silva",
+        "email": "vera.silva@silva-group-c5.example.com",
+        "company": "Silva Group C5",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Hotel group, 4 hotels. Booking changes by e-mail are typed by hand; we want this automated."
+      },
+      "trigger": {
+        "path": "review Reject",
+        "review_click": "reject",
+        "reply_click": null,
+        "expect_final_status": "review_rejected",
+        "expect_reply_status": "",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TD1",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Oskar Falk",
+        "email": "oskar.falk@falk-group-d1.example.com",
+        "company": "Falk Group D1",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Logistics firm, 90 staff. We want order e-mails entered into our ERP automatically. Budget approved."
+      },
+      "trigger": {
+        "path": "review no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "review_pending",
+        "expect_reply_status": "",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TD2",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Rosa Ortiz",
+        "email": "rosa.ortiz@ortiz-group-d2.example.com",
+        "company": "Ortiz Group D2",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Accounting office, 40 staff. We want receipts from clients read and booked automatically."
+      },
+      "trigger": {
+        "path": "review no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "review_pending",
+        "expect_reply_status": "",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TD3",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Adam Nagy",
+        "email": "adam.nagy@nagy-group-d3.example.com",
+        "company": "Nagy Group D3",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Online shop, 25 staff. Customer e-mails should be sorted and answered faster."
+      },
+      "trigger": {
+        "path": "review no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "review_pending",
+        "expect_reply_status": "",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TD4",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Iris Dahl",
+        "email": "iris.dahl@dahl-group-d4.example.com",
+        "company": "Dahl Group D4",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Clinic group, 6 clinics. Appointment requests by e-mail should be booked automatically."
+      },
+      "trigger": {
+        "path": "review no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "review_pending",
+        "expect_reply_status": "",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TD5",
+      "category": "simulated_bad_ai_output",
+      "expected": [
+        "review"
+      ],
+      "test_flag": "bad_ai_output",
+      "lead": {
+        "name": "Max Stein",
+        "email": "max.stein@stein-group-d5.example.com",
+        "company": "Stein Group D5",
+        "website": "",
+        "job_title": "Operations Manager",
+        "message": "Hotel group, 4 hotels. Booking changes by e-mail are typed by hand; we want this automated."
+      },
+      "trigger": {
+        "path": "review no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "review_pending",
+        "expect_reply_status": "",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TE1",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Lea Ruiz",
+        "email": "lea.ruiz@northwind-logistics.example.com",
+        "company": "Northwind Logistics",
+        "website": "https://northwind-logistics.example.com",
+        "job_title": "Operations Manager",
+        "message": "We re-type about 200 shipment orders a week from customer emails into our transport system. I want this automated. Budget is approved for this quarter and we would like to start within 4 weeks."
+      },
+      "trigger": {
+        "path": "high fit + reply Send",
+        "review_click": null,
+        "reply_click": "send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TE2",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Bruno Janik",
+        "email": "bruno.janik@clearpath-software.example.com",
+        "company": "Clearpath Software",
+        "website": "https://clearpath-software.example.com",
+        "job_title": "Head of Sales",
+        "message": "Our SDR team spends hours qualifying inbound demo requests by hand. We want AI scoring of new leads pushed into HubSpot. Budget around 5-8k EUR, decision this month."
+      },
+      "trigger": {
+        "path": "high fit + reply Send",
+        "review_click": null,
+        "reply_click": "send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TE3",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Mira Costa",
+        "email": "mira.costa@lumen-dental.example.com",
+        "company": "Lumen Dental Group",
+        "website": "https://lumen-dental.example.com",
+        "job_title": "COO",
+        "message": "We run 12 clinics. Patient intake forms and appointment reminders are still manual across all of them. Looking for a partner to automate this, start next month."
+      },
+      "trigger": {
+        "path": "high fit + reply Send",
+        "review_click": null,
+        "reply_click": "send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TE4",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Pavel Bauer",
+        "email": "pavel.bauer@verde-home.example.com",
+        "company": "Verde Home",
+        "website": "https://verde-home.example.com",
+        "job_title": "E-commerce Director",
+        "message": "Shopify brand, 60 staff. We want AI triage of customer service emails and automatic handling of order exceptions. Budget up to 10k EUR, want to start in November."
+      },
+      "trigger": {
+        "path": "high fit + reply Send",
+        "review_click": null,
+        "reply_click": "send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TE5",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Tina Lang",
+        "email": "tina.lang@summit-accounting.example.com",
+        "company": "Summit Accounting Partners",
+        "website": "https://summit-accounting.example.com",
+        "job_title": "IT Manager",
+        "message": "120-person accounting firm. Clients send invoices and receipts by email; we want the data extracted and posted into Xero automatically. Please send a proposal this week."
+      },
+      "trigger": {
+        "path": "high fit + reply Send",
+        "review_click": null,
+        "reply_click": "send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "approved_sent_to_demo_inbox",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TF1",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Erik Fox",
+        "email": "erik.fox@beacon-hr.example.com",
+        "company": "Beacon HR",
+        "website": "https://beacon-hr.example.com",
+        "job_title": "Head of Customer Success",
+        "message": "HR SaaS, 150 employees. We need a churn-risk alert: read support tickets, flag unhappy accounts in HubSpot and alert the account owner in Slack. Have budget for Q4."
+      },
+      "trigger": {
+        "path": "high fit + reply Don't send",
+        "review_click": null,
+        "reply_click": "dont_send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TF2",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Zora Blom",
+        "email": "zora.blom@keystone-brokers.example.com",
+        "company": "Keystone Insurance Brokers",
+        "website": "https://keystone-brokers.example.com",
+        "job_title": "VP Operations",
+        "message": "200 staff. Renewal reminders and quote requests are handled in spreadsheets. We want an automated workflow with our CRM. Budget approved, timeline 6 weeks."
+      },
+      "trigger": {
+        "path": "high fit + reply Don't send",
+        "review_click": null,
+        "reply_click": "dont_send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TF3",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Otto Varga",
+        "email": "otto.varga@nordhavn-staffing.example.com",
+        "company": "Nordhavn Staffing",
+        "website": "https://nordhavn-staffing.example.com",
+        "job_title": "Head of Operations",
+        "message": "Recruitment agency, 85 employees. Candidate CVs arrive by email and our team re-types them into our ATS. We want this parsed and matched automatically. Budget 8k EUR, start in January."
+      },
+      "trigger": {
+        "path": "high fit + reply Don't send",
+        "review_click": null,
+        "reply_click": "dont_send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TF4",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Alma Hale",
+        "email": "alma.hale@quill-analytics.example.com",
+        "company": "Quill Analytics",
+        "website": "https://quill-analytics.example.com",
+        "job_title": "Head of Customer Support",
+        "message": "B2B SaaS, 90 employees. Support tickets are sorted by hand into Zendesk queues. We want AI triage and priority tagging, with escalations posted to Slack. Budget around 7k EUR, start in February."
+      },
+      "trigger": {
+        "path": "high fit + reply Don't send",
+        "review_click": null,
+        "reply_click": "dont_send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TF5",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Rene Moss",
+        "email": "rene.moss@lanterna-physio.example.com",
+        "company": "Lanterna Physio",
+        "website": "https://lanterna-physio.example.com",
+        "job_title": "CFO",
+        "message": "We run 18 physiotherapy clinics with 220 staff. Supplier invoices from every clinic are approved by email and typed into our ERP by two people. We want extraction and an approval flow. Budget approved for Q1, please send a proposal within 2 weeks."
+      },
+      "trigger": {
+        "path": "high fit + reply Don't send",
+        "review_click": null,
+        "reply_click": "dont_send",
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "reply_rejected",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TG1",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Klara Pike",
+        "email": "klara.pike@maple-ridge-freight.example.com",
+        "company": "Maple Ridge Freight",
+        "website": "https://maple-ridge-freight.example.com",
+        "job_title": "Director of Operations",
+        "message": "Trucking company, 320 employees. Drivers e-mail proof-of-delivery photos; the office matches them to orders by hand before invoicing. We want that matched automatically and invoicing triggered. Budget approved, timeline 8 weeks."
+      },
+      "trigger": {
+        "path": "high fit + reply no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "awaiting_approval",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TG2",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Simon Rowe",
+        "email": "simon.rowe@saltmarsh-apparel.example.com",
+        "company": "Saltmarsh Apparel",
+        "website": "https://saltmarsh-apparel.example.com",
+        "job_title": "Head of E-commerce",
+        "message": "Online clothing brand, 40 staff. Return requests come through a form and e-mail and are approved manually. We want triage, automatic approval of simple cases and refunds pushed to Shopify. Budget 5k GBP, start next month."
+      },
+      "trigger": {
+        "path": "high fit + reply no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "awaiting_approval",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TG3",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Ines Shaw",
+        "email": "ines.shaw@kestrel-legal.example.com",
+        "company": "Kestrel Legal Partners",
+        "website": "https://kestrel-legal.example.com",
+        "job_title": "Managing Partner",
+        "message": "Law firm, 160 staff. New client onboarding means collecting ID documents, running conflict checks and opening a matter in our practice system, all by hand. We want this automated end to end. Budget approved, start in Q1."
+      },
+      "trigger": {
+        "path": "high fit + reply no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "awaiting_approval",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TG4",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Noah Tate",
+        "email": "noah.tate@pinecrest-marketing.example.com",
+        "company": "Pinecrest Marketing",
+        "website": "https://pinecrest-marketing.example.com",
+        "job_title": "COO",
+        "message": "Marketing agency, 35 people in Austin. Leads from our ad forms sit in a spreadsheet until someone copies them to HubSpot. We want them scored, pushed to HubSpot and a first proposal drafted. Budget 10k USD, decision within 3 weeks."
+      },
+      "trigger": {
+        "path": "high fit + reply no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "awaiting_approval",
+        "click_twice": false
+      }
+    },
+    {
+      "id": "TG5",
+      "category": "clear_fit",
+      "expected": [
+        "high_fit"
+      ],
+      "lead": {
+        "name": "Lina Wolf",
+        "email": "lina.wolf@northwind-logistics.example.com",
+        "company": "Northwind Logistics",
+        "website": "https://northwind-logistics.example.com",
+        "job_title": "Operations Manager",
+        "message": "We re-type about 200 shipment orders a week from customer emails into our transport system. I want this automated. Budget is approved for this quarter and we would like to start within 4 weeks."
+      },
+      "trigger": {
+        "path": "high fit + reply no click",
+        "review_click": null,
+        "reply_click": null,
+        "expect_final_status": "crm_created",
+        "expect_reply_status": "awaiting_approval",
+        "click_twice": false
+      }
+    }
+  ]
+}

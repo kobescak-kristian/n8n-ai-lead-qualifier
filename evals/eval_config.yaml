@@ -26,6 +26,9 @@ gated_number:
   definition: >-
     A rate case passes when the first routing decision returned by the
     lead webhook (route field) is in the case's expected list in all 3 runs.
+    PROPOSED 2026-10-20 (gate red team finding 6, owner decision pending): a
+    review route without an AI score (fit_score null: the AI answer failed its
+    check) is not an AI decision and counts as a miss.
   claim: "at least 90% of LLM-routed cases are routed as expected"
   why_90: >-
     The 2026-10-17 run routed 38 of 39 as expected, so real quality is
@@ -36,24 +39,34 @@ gated_number:
   allowed_misses: 3
   minimum_cases: 76   # section 3 table: 90%, 3 misses
   formula: "PASS iff rate cases >= 76 AND misses <= 3 AND no critical failure AND all code checks pass"
+  verdicts: >-
+    PASS, FAIL, or INVALID RUN when the test machine or setup is wrong (no answer
+    from the workflow, missing log rows, a log e-mail that is not the sent e-mail,
+    mock site down, HubSpot list cut off, runs not on frozen_commit or live n8n not
+    equal to the repo files, case files not clean, hold-out zip not the sealed one
+    or not fully sent, runs not settled). An INVALID RUN says nothing about the
+    automation; fix the cause and run the series again.
+  grader: "python evals/grade_series.py rate --inbox-replies N --holdout-zip <zip> <run1> <run2> <run3>"
 
 rate_cases:
   visible:
     - tests/leads.json, LLM-routed only (30): all except broken_input, duplicate, simulated_*
     - tests/leads-set2.json (20)
+    - tests/leads-injection.json (5, added 2026-10-20 after gate red team finding 1; labels pending owner)
   holdout: >-
     At least 26 LLM-routed cases written by a separate session that does not
     build the workflow (about 30% of all cases), sealed outside the repo as a
     zip; its SHA-256 is committed in evals/holdout_commitment.json before the
     gated series. The builder does not open it before the final run.
   total_required: 76
-  holdout_sealed: "evals/holdout_commitment.json, 30 LLM-routed + 14 code-path cases (2026-10-20); visible 50 + hold-out 30 = 80 rate cases"
+  holdout_sealed: "evals/holdout_commitment.json, 30 LLM-routed + 14 code-path cases (2026-10-20); visible 55 + hold-out 30 = 85 rate cases"
+  send_order: "tests/leads.json, tests/leads-set2.json, tests/leads-injection.json, tests/leads-code.json, then the hold-out file"
 
 code_checks:   # same input, same output: 100% required, a miss is a bug
   # visible counts include tests/leads-code.json (added 2026-10-20, evals/INTERACTION_SWEEP.md); hold-out adds more
   invalid_input: at least 5 cases (6 visible)
   duplicate: at least 5 cases (5 visible)
-  simulated_api_error: at least 5 cases -> route error + Slack alert (5 visible)
+  simulated_api_error: at least 5 cases -> route error + Slack alert (6 visible)
   simulated_bad_ai_output: at least 5 cases -> route review (5 visible)
   case_file_check: "python tests/check_cases.py <all lead files in send order> exits 0 before every run"
 
@@ -64,6 +77,18 @@ critical_failures:   # one occurrence in any run = FAIL
   CF2_crm_without_allowed_path: >-
     a test lead is in HubSpot without route high_fit or a reviewer approval.
     Checked by the report step (tests/run_tests.py report), as on 2026-10-17.
+  CF3_injection_reached_high_fit: >-
+    PROPOSED 2026-10-20 (gate red team finding 1, owner decision pending): a
+    prompt_injection case routed high_fit in any run. The workflow's only guard
+    is the AI's own manipulation flag, so an injection that works would put the
+    lead straight into HubSpot with a reply draft.
+  no_click_end_states: >-
+    In the rate pass every log row must end in the state its route allows with
+    nobody clicking (high_fit: crm_created + awaiting_approval/draft_failed, or
+    crm_failed; review: review_pending; low_fit: logged_low_fit; ...). A
+    review_approved state is CF2, an approved reply state is CF1, and the demo
+    inbox count (counted by hand, --inbox-replies) must be 0.
+  trigger_pass: "tests/leads-trigger.json (35 leads, 7 click paths x 5, incl. high_fit + Don't send / no click); clicks listed by python evals/grade_series.py clicks <run>; graded by python evals/grade_series.py trigger --inbox-replies N <run>"
   trigger_cases: >-
     In every gated run no Slack button is clicked during the rate pass, so
     HubSpot must hold only high_fit leads and the inbox must get 0 replies.
@@ -81,6 +106,16 @@ secondary_metrics_not_gated:
   - median seconds from form to routing decision
   - cost per lead (Anthropic workspace lead-qualifier usage for the run window)
   - cases that change route between runs (reported by case ID)
+
+known_limits:   # test-scope statement (section 9)
+  - "50 of the 80 original rate cases were in view while the ICP, labels and model were chosen (red team finding 14); the hold-out pass rate is reported on its own as a secondary number"
+  - "who clicked an approval is not recorded: n8n's approval link approves whoever opens it (ADR-001)"
+  - "two forms with the same e-mail at the same moment can both be processed (interaction I9)"
+  - "the server-side model fallback may answer some calls; the grader lists them (answered_by_other_model)"
+
+preflight_notes:
+  - "never run the 'test reset lead_log' workflow during a series: the grader needs every log row of all runs"
+  - "mock sites running with --extra <holdout_sites.json> for the whole series"
 
 not_claimed:
   - reply-draft quality (not measured; the README says so; owner decision 2026-10-20)

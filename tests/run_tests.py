@@ -80,7 +80,7 @@ def build_payload(case, tag=None):
     return lead
 
 
-def post(url, payload, timeout=120, headers=None):
+def post(url, payload, timeout=400, headers=None):  # scoring can take 3 tries x 120 s
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json", **(headers or {})})
     start = time.time()
@@ -100,24 +100,54 @@ def post(url, payload, timeout=120, headers=None):
     return status, parsed, seconds
 
 
+def file_sha256(path):
+    """SHA-256 of a text file with line endings made LF (same on every checkout)."""
+    import hashlib
+    return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
+def version_info(files):
+    """What this run tests: repo commit, clean or not, lead file hashes, model, live n8n = repo files."""
+    import hashlib
+    import subprocess
+    repo = ROOT.parent
+
+    def git(*a):
+        r = subprocess.run(["git", *a], cwd=repo, capture_output=True, text=True)
+        return r.stdout.strip() if r.returncode == 0 else None
+    info = {"commit": git("rev-parse", "HEAD"), "dirty": bool(git("status", "--porcelain")),
+            "lead_file_sha256": {str(f): file_sha256(f) for f in files}}
+    try:
+        sys.path.insert(0, str(repo / "tools"))
+        import n8n_api
+        settings = n8n_api.repo_settings()
+        info.update(model=settings["model"], effort=settings["effort"],
+                    live_differs_from_repo=n8n_api.live_differs_from_repo())
+    except (SystemExit, Exception) as err:  # recorded, the grader treats it as not checked
+        info["live_check_error"] = str(err)[:300]
+    return info
+
+
 def cmd_send(base, files, tag):
     cases = []
     for f in files:
         cases += json.loads(Path(f).read_text(encoding="utf-8"))["leads"]
     started = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    version = version_info(files)
     rows = []
     for case in cases:
-        status, body, seconds = post(base + LEAD_PATH, build_payload(case, tag), headers=auth(LEAD_KEY))
+        payload = build_payload(case, tag)
+        status, body, seconds = post(base + LEAD_PATH, payload, headers=auth(LEAD_KEY))
         route = body.get("route") if isinstance(body, dict) else None
         rows.append({"id": case["id"], "category": case["category"], "expected": case["expected"],
-                     "http_status": status, "route": route, "log_id": body.get("log_id"),
-                     "seconds": seconds, "response": body})
+                     "sent_email": payload.get("email"), "http_status": status, "route": route,
+                     "log_id": body.get("log_id"), "seconds": seconds, "response": body})
         mark = "OK " if route in case["expected"] else "-- "
         print(f"{mark}{case['id']:4} {case['category']:24} -> {route} ({seconds}s)")
     RESULTS_DIR.mkdir(exist_ok=True)
     out = RESULTS_DIR / f"run-{started}.json"
     out.write_text(json.dumps({"started_utc": started, "base": base, "lead_files": [str(f) for f in files],
-                                "tag": tag, "rows": rows}, indent=2), encoding="utf-8")
+                                "tag": tag, "version": version, "rows": rows}, indent=2), encoding="utf-8")
     print(f"\nSaved {out.relative_to(ROOT.parent)}")
     print("Now do the Slack reviews, then run: python tests/run_tests.py report", out.relative_to(ROOT.parent))
 

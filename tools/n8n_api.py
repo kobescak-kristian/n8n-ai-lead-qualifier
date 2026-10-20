@@ -153,7 +153,8 @@ def repo_settings():
 
 
 # Nodes whose parameters the repo file decides (credentials stay as they are in n8n).
-REPO_NODES = {"Q116LeadReport01": ("HubSpot contacts", "Build report")}
+REPO_NODES = {"Q116LeadQualify1": ("Respond: routed",),
+              "Q116LeadReport01": ("HubSpot contacts", "Build report")}
 
 
 def repo_node_params(wid):
@@ -197,7 +198,7 @@ def cmd_apply():
                         a["value"] = wanted[a["name"]]
                         found += 1
         if found != {"Q116LeadQualify1": 1 + len(REPO_SETTINGS),
-                     "Q116LeadReport01": 1 + len(REPO_NODES["Q116LeadReport01"])}.get(wid, 0):
+                     "Q116LeadReport01": 1}.get(wid, 0) + len(REPO_NODES.get(wid, ())):
             sys.exit(f"{wid}: expected nodes not found ({found})")
         settings = {k: v for k, v in (w.get("settings") or {}).items() if k in SETTINGS_ALLOWED}
         call("PUT", f"/workflows/{wid}", {"name": new_name, "nodes": w["nodes"],
@@ -207,29 +208,41 @@ def cmd_apply():
         print(f"applied: {wid} -> '{new_name}'" + (" (published)" if was_active else ""))
 
 
+def export_text(wid):
+    """The live workflow as the text `export` writes (credentials and personal settings stripped)."""
+    wf = get_wf(wid)
+    out = {k: wf[k] for k in ("name", "id", "nodes", "connections", "settings") if k in wf}
+    out.update(pinData={}, tags=[], active=False)
+    # Same field order as the earlier CLI exports, so diffs show real changes only.
+    first = ["parameters", "id", "name", "type", "typeVersion", "position", "retryOnFail",
+             "maxTries", "waitBetweenTries", "alwaysOutputData", "onError", "webhookId"]
+    out["nodes"] = [{k: n[k] for k in first + sorted(set(n) - set(first)) if k in n}
+                    for n in out["nodes"]]
+    for node in out["nodes"]:
+        node.pop("credentials", None)
+        if node["name"] == "Settings":
+            for a in node["parameters"]["assignments"]["assignments"]:
+                if a["name"] in ("from_email", "demo_inbox"):
+                    a["value"] = ""
+    text = json.dumps(out, indent=2, ensure_ascii=False) + "\n"
+    # Safety net: any e-mail left that is not a fictional example.com address stops the export.
+    left = {m for m in re.findall(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+", text) if not m.endswith("example.com")}
+    if left:
+        sys.exit(f"{wid}: unexpected e-mail-like strings {sorted(left)}")
+    return text
+
+
+def live_differs_from_repo():
+    """Workflow files whose live version differs from the repo file (empty list = live is the repo)."""
+    return [fname for wid, fname in FILES.items()
+            if export_text(wid) != (ROOT / "workflows" / fname).read_text(encoding="utf-8").replace("\r\n", "\n")]
+
+
 def cmd_export():
     for wid, fname in FILES.items():
-        wf = get_wf(wid)
-        out = {k: wf[k] for k in ("name", "id", "nodes", "connections", "settings") if k in wf}
-        out.update(pinData={}, tags=[], active=False)
-        # Same field order as the earlier CLI exports, so diffs show real changes only.
-        first = ["parameters", "id", "name", "type", "typeVersion", "position", "retryOnFail",
-                 "maxTries", "waitBetweenTries", "alwaysOutputData", "onError", "webhookId"]
-        out["nodes"] = [{k: n[k] for k in first + sorted(set(n) - set(first)) if k in n}
-                        for n in out["nodes"]]
-        for node in out["nodes"]:
-            node.pop("credentials", None)
-            if node["name"] == "Settings":
-                for a in node["parameters"]["assignments"]["assignments"]:
-                    if a["name"] in ("from_email", "demo_inbox"):
-                        a["value"] = ""
-        text = json.dumps(out, indent=2, ensure_ascii=False) + "\n"
-        # Safety net: any e-mail left that is not a fictional example.com address stops the export.
-        left = {m for m in re.findall(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+", text) if not m.endswith("example.com")}
-        if left:
-            sys.exit(f"{wid}: unexpected e-mail-like strings {sorted(left)}")
+        text = export_text(wid)
         (ROOT / "workflows" / fname).write_text(text, encoding="utf-8", newline="\n")
-        print(f"exported: {fname} ({len(out['nodes'])} nodes)")
+        print(f"exported: {fname} ({len(json.loads(text)['nodes'])} nodes)")
 
 
 if __name__ == "__main__":

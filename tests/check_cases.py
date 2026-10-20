@@ -7,12 +7,19 @@ sends them one after the other, so a duplicate case must come after its original
 Checks the whole set every time and exits 1 on any of:
   - a case ID used twice;
   - an expected route the workflow does not have, or an empty expected list;
+  - a code-path case (broken_input, duplicate, simulated_*) whose expected list is not
+    exactly its one code route; an AI-routed case expecting anything other than
+    high_fit / low_fit / review (so a misspelled code-path category cannot turn
+    into a rate case); a prompt_injection case that allows high_fit;
   - the same e-mail (trimmed, lower case) on two cases, unless the later one is a
-    "duplicate" case on purpose (like the workflow, a case expected to be
-    invalid_input does not take its e-mail, so a corrected form may reuse it);
+    "duplicate" case on purpose (like the workflow, a case expected to end in
+    invalid_input or error does not keep its e-mail, so a later form may reuse it);
   - a "duplicate" case whose original is missing or comes later;
   - a "duplicate" case that does not expect exactly ["duplicate"];
-  - a simulated_* case without its test flag, or an unknown test flag.
+  - a simulated_* case without its test flag, a test flag on any other case, or an
+    unknown test flag.
+Categories outside KNOWN_CATEGORIES are printed as a note, not an error: the route
+rules above already stop a misspelled code-path category.
 Reads only; writes nothing. Exit 0 and one summary line when the set is clean.
 """
 import json
@@ -21,7 +28,13 @@ from collections import Counter
 from pathlib import Path
 
 ROUTES = {"high_fit", "low_fit", "review", "invalid_input", "duplicate", "error"}
+RATE_ROUTES = {"high_fit", "low_fit", "review"}
 FLAGS = {"simulated_bad_ai_output": "bad_ai_output", "simulated_api_error": "api_error"}
+CODE_ROUTE = {"broken_input": "invalid_input", "duplicate": "duplicate",
+              "simulated_bad_ai_output": "review", "simulated_api_error": "error"}
+KNOWN_CATEGORIES = set(CODE_ROUTE) | {
+    "clear_fit", "clear_non_fit", "unsure", "junk_text", "html_in_input", "non_english",
+    "prompt_injection", "website_problem", "website_mismatch", "enterprise_procurement", "solo_no_budget"}
 
 
 def norm_email(value):
@@ -43,23 +56,32 @@ def check(cases):
         for route in exp:
             if route not in ROUTES:
                 problems.append(f"{where}: expected route '{route}' does not exist")
+        if cat in CODE_ROUTE:
+            if exp and exp != [CODE_ROUTE[cat]]:
+                problems.append(f"{where}: a {cat} case must expect exactly ['{CODE_ROUTE[cat]}']")
+        else:
+            wrong = [r for r in exp if r in ROUTES and r not in RATE_ROUTES]
+            if wrong:
+                problems.append(f"{where}: an AI-routed case may only expect high_fit / low_fit / review, not {wrong}")
+            if cat == "prompt_injection" and "high_fit" in exp:
+                problems.append(f"{where}: a prompt_injection case must never allow high_fit")
         flag = c.get("test_flag")
         if cat in FLAGS and flag != FLAGS[cat]:
             problems.append(f"{where}: category {cat} needs test_flag '{FLAGS[cat]}'")
         if flag is not None and flag not in FLAGS.values():
             problems.append(f"{where}: unknown test_flag '{flag}'")
+        elif flag is not None and cat not in FLAGS:
+            problems.append(f"{where}: test_flag '{flag}' on a case that is not simulated_*")
         email = norm_email((c.get("lead") or {}).get("email"))
         if cat == "duplicate":
-            if exp != ["duplicate"]:
-                problems.append(f"{where}: a duplicate case must expect exactly ['duplicate']")
             if email is None or email not in first_seen:
                 later = any(norm_email((o.get("lead") or {}).get("email")) == email
                             for _, o in cases[pos + 1:])
                 problems.append(f"{where}: original lead " + ("comes later" if later else "is missing"))
-        elif email and exp != ["invalid_input"]:
+        elif email and exp != ["invalid_input"]:  # an invalid form is never looked up
             if email in first_seen:
                 problems.append(f"{where}: same e-mail as {first_seen[email]} but not a duplicate case")
-            else:
+            elif exp != ["error"]:  # an AI error clears lead_key: the e-mail is free again
                 first_seen[email] = cid
     return problems
 
@@ -84,7 +106,10 @@ def main(argv):
         print(f"{len(problems)} problem(s) in {len(cases)} cases. Fix the case files before any run.")
         return 1
     cats = Counter(c.get("category") for _, c in cases)
-    code_path = sum(cats[k] for k in ("broken_input", "duplicate", *FLAGS))
+    unknown = sorted(set(cats) - KNOWN_CATEGORIES)
+    if unknown:
+        print(f"Note: categories not seen before (graded as AI-routed): {', '.join(map(str, unknown))}")
+    code_path = sum(cats[k] for k in CODE_ROUTE)
     print(f"OK: {len(cases)} cases, {len(cases) - code_path} LLM-routed, {code_path} code-path "
           f"(invalid {cats['broken_input']}, duplicate {cats['duplicate']}, "
           f"bad AI output {cats['simulated_bad_ai_output']}, API error {cats['simulated_api_error']})")

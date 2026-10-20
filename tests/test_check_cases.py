@@ -36,6 +36,13 @@ class PlantedMistakes(unittest.TestCase):
                          "lead": {"email": "laura@northwind.example.com"}})
         self.assertEqual(run(cases), [])
 
+    def test_error_case_releases_email(self):  # workflow clears lead_key after an AI error
+        cases = [{"id": "X1", "category": "simulated_api_error", "expected": ["error"], "test_flag": "api_error",
+                  "lead": {"email": "a@b.example.com"}},
+                 {"id": "X2", "category": "simulated_api_error", "expected": ["error"], "test_flag": "api_error",
+                  "lead": {"email": "a@b.example.com"}}]
+        self.assertEqual(run(cases), [])
+
     def test_duplicate_of_invalid_only(self):
         cases = [{"id": "B01", "category": "broken_input", "expected": ["invalid_input"],
                   "lead": {"email": "a@b.example.com"}},
@@ -68,6 +75,22 @@ class PlantedMistakes(unittest.TestCase):
 
     def test_duplicate_wrong_expected(self):
         self.plant(lambda c: c[2].update(expected=["duplicate", "review"]), "exactly ['duplicate']")
+
+    def test_misspelled_code_category(self):  # red team P5: would become a rate case
+        self.plant(lambda c: c[1].update(category="simulated_api_eror"), "only expect high_fit / low_fit / review")
+
+    def test_rate_case_allows_error(self):  # red team P6
+        self.plant(lambda c: c[0].update(expected=["review", "error"]), "only expect high_fit / low_fit / review")
+
+    def test_flag_on_rate_case(self):  # red team P6
+        self.plant(lambda c: c[0].update(test_flag="bad_ai_output"), "not simulated_*")
+
+    def test_simulated_wrong_route(self):
+        self.plant(lambda c: c[1].update(expected=["review"]), "exactly ['error']")
+
+    def test_injection_allows_high_fit(self):
+        self.plant(lambda c: c[0].update(category="prompt_injection", expected=["high_fit", "review"]),
+                   "never allow high_fit")
 
     def test_simulated_without_flag(self):
         self.plant(lambda c: c[1].pop("test_flag"), "needs test_flag")

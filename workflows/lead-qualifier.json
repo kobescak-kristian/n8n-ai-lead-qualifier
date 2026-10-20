@@ -543,7 +543,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ route: $('Decide route').first().json.route, log_id: $('Log: new lead').first().json.id, fit_score: $('Row: scored').first().json.fit_score, confidence: $('Row: scored').first().json.confidence }) }}",
+        "responseBody": "={{ JSON.stringify({ route: $('Decide route').first().json.route, log_id: $('Log: new lead').first().json.id, fit_score: $('Row: scored').first().json.fit_score, confidence: $('Row: scored').first().json.confidence, model_used: $('Check AI answer').first().json.model_used }) }}",
         "options": {}
       },
       "id": "7032cb37-88a2-4ed3-be74-25a3fb498ce8",
