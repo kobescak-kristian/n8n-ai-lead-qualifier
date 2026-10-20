@@ -1,0 +1,10 @@
+{
+  "about": "Sealed hold-out for the final gated series (evals/eval_config.yaml). Written by a separate session that does not build the workflow; every label settled by the owner on 2026-10-20 under the 2026-10-20 profile rules. The builder has not opened it. It is unzipped into a temporary folder only at the final run, keeping file order (each duplicate after its original).",
+  "archive": "holdout.zip in the owner's q116-holdout folder, outside the repo (path not committed)",
+  "archive_sha256": "157443086d32487866d34ffa1b78a625bf626afaf98d6716eff93ea896a706cf",
+  "archive_bytes": 16146,
+  "sealed": "2026-10-20T06:06+02:00",
+  "contents": ["holdout.json (lead cases, same format as tests/leads.json)", "holdout_sites.json (mock pages, for tests/mock_sites/server.py --extra)", "label-review.md"],
+  "cases": {"total": 44, "llm_routed": 30, "code_path": 14},
+  "writer_session": "local_0e5ee58d-d4fb-46bc-ba98-d257ab12f7d8"
+}

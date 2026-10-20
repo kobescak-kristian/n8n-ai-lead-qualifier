@@ -47,6 +47,7 @@ rate_cases:
     zip; its SHA-256 is committed in evals/holdout_commitment.json before the
     gated series. The builder does not open it before the final run.
   total_required: 76
+  holdout_sealed: "evals/holdout_commitment.json, 30 LLM-routed + 14 code-path cases (2026-10-20); visible 50 + hold-out 30 = 80 rate cases"
 
 code_checks:   # same input, same output: 100% required, a miss is a bug
   invalid_input: at least 5 cases (4 visible today, hold-out adds the rest)
