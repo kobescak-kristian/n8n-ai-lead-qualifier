@@ -1,6 +1,6 @@
 {
   "about": "Exact JSON schema the workflow's 'Build scoring request' node passes to the Anthropic API as output_config.format (type json_schema). The system prompt does not describe the output format; the workflow relies on this schema. A fair benchmark must enforce it the same way or the model may not answer in JSON at all.",
-  "model": "claude-opus-5-5",
+  "model": "claude-haiku-5-5",
   "effort": "low",
   "max_tokens": 4000,
   "thresholds": {
