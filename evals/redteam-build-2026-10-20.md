@@ -19,7 +19,7 @@ folder was not opened, no tracked file edited, nothing committed. Probe scripts 
 | own probe `bindtest.py` (two `ThreadingHTTPServer` on port 18199, Python 3.12.0) | `SECOND BIND SUCCEEDED: two servers on one port, no error` (finding 5) |
 | `netstat -ano` + process command line | port 8099: one listener, PID 7236, started 22:37:48, command `python.exe tests/mock_sites/server.py` (no `--extra`) |
 | table of all 6 run files (route, fit_score, confidence, seconds, HTTP status, model_used per case) | see finding 7 |
-| `node tests/check_guard.mjs C:/.../copy-injection.json` (absolute path) | `ENOENT ... n8n-ai-lead-qualifier\C:\Users\...`, exit 1 (finding 8) |
+| `node tests/check_guard.mjs C:/.../copy-injection.json` (absolute path) | `ENOENT ... n8n-ai-lead-qualifier\C:\...`, exit 1 (finding 8) |
 
 Read: eval-gate SKILL.md and references/build-checks.md; STATE.md, AGENTS.md, adr/001; evals/eval_config.yaml,
 INTERACTION_SWEEP.md, both gate red team reports, holdout_commitment.json, grade_series.py; workflows/lead-qualifier.json
@@ -185,7 +185,7 @@ and both `.dev.json` files.
 ### 8. check_guard.mjs breaks on an absolute file path and then exits 1, like "GUARD WRONG"
 
 - Evidence: `tests/check_guard.mjs:45` uses `path.join(REPO, f)`; with `C:/...` the path becomes
-  `...\n8n-ai-lead-qualifier\C:\Users\...` -> ENOENT, exit 1. A relative path works (`OK: 5 stopped`).
+  `...\n8n-ai-lead-qualifier\C:\...` -> ENOENT, exit 1. A relative path works (`OK: 5 stopped`).
   The script also decides "must be stopped" only by the category text `prompt_injection`.
 - Why it matters: the keeper session will run it on a hold-out file outside the repo (finding 2). A crash with
   exit 1 can be read as "the guard is wrong".
@@ -223,13 +223,13 @@ Findings: 9; changed the build: 0; changed the test: 0; no change: 9
 
 ## Builder response (2026-10-21)
 
-1. Build: the system prompt states the score bands from Settings (a29f9d8).
-2. Build and test: narrower guard patterns; G01-G03 must stay high_fit (`tests/leads-guard.json`, owner labels 2026-10-21). Keeper check on the hold-out: 0 of 12 cases that allow high_fit stopped; the 3 stops are all prompt_injection.
-3. Build and test: the guard reads exactly the AI's user message, cleaned of hidden characters and HTML entities; I06 tests the website field.
-4. Build: "more than 1,000 and up to 5,000"; owner lines added to "Possible fit, a person decides" (2026-10-21): one-person businesses with budget and a concrete process, companies whose stated budget is clearly too small, enterprises above 5,000 that can buy without formal procurement. Keeper label check: size_gap 2 cases / 1 mismatch, small_budget 1 / 1, solo_with_budget 1 / 0, both mismatches profile gaps now covered by these lines.
-5. Test: `server.py` refuses a busy port; preflight line "exactly one LISTENING line".
+1. Build: score bands are in the system prompt (a29f9d8).
+2. Build and test: narrower guard patterns; G01-G03 must stay high_fit; hidden-set count by the keeper (owner question 3a).
+3. Build and test: the guard reads exactly the AI's user message and removes hidden characters and HTML entities; I06 tests the website field.
+4. Build: "more than 1,000 and up to 5,000"; one-person business with budget decided by the owner; hidden-label count by the keeper (3b).
+5. Test: server.py refuses a busy port; preflight line "exactly one LISTENING line".
 6. Test: preflight line to stop old waiting executions before run 1.
-7. (a) STATE corrected (U01 missed in run 2, dev1020e); (b) build: "Respond: routed" returns guard_hits, and test: the grader lists guard stops; (c) all-zero AI answer recorded as a known limit.
+7. (a) STATE corrected; (b) build: "Respond: routed" returns guard_hits, and the grader lists guard stops; (c) all-zero AI answer recorded as a known limit.
 8. Test: absolute paths work; a crash exits 3.
 9. Test: sweep rows I15-I22 added.
 

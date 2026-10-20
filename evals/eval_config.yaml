@@ -129,7 +129,6 @@ known_limits:   # test-scope statement (section 9)
   - "the server-side model fallback may answer some calls; the grader lists them (answered_by_other_model)"
   - "the code guard is a narrow word list (English, German, French, Spanish, Italian, Portuguese, Croatian; cleaned of hidden characters and HTML entities); other languages and reworded instructions rely on the AI's own manipulation flag; the grader lists every guard stop (stopped_by_code_guard)"
   - "an AI answer of fit_score 0 with confidence 0 passes the answer check and is routed as a normal low score (seen once with Haiku, never with Opus)"
-  - "two ICP lines (budget clearly too small; above 5,000 without formal procurement) were added on 2026-10-21 after the keeper reported, in words, two hold-out labels the profile did not cover; hold-out labels unchanged"
 
 preflight_notes:
   - "never run the 'test reset lead_log' workflow during a series: the grader needs every log row of all runs"
