@@ -50,10 +50,12 @@ rate_cases:
   holdout_sealed: "evals/holdout_commitment.json, 30 LLM-routed + 14 code-path cases (2026-10-20); visible 50 + hold-out 30 = 80 rate cases"
 
 code_checks:   # same input, same output: 100% required, a miss is a bug
-  invalid_input: at least 5 cases (4 visible today, hold-out adds the rest)
-  duplicate: at least 5 cases (3 visible today)
-  simulated_api_error: at least 5 cases -> route error + Slack alert (1 visible today)
-  simulated_bad_ai_output: at least 5 cases -> route review (1 visible today)
+  # visible counts include tests/leads-code.json (added 2026-10-20, evals/INTERACTION_SWEEP.md); hold-out adds more
+  invalid_input: at least 5 cases (6 visible)
+  duplicate: at least 5 cases (5 visible)
+  simulated_api_error: at least 5 cases -> route error + Slack alert (5 visible)
+  simulated_bad_ai_output: at least 5 cases -> route review (5 visible)
+  case_file_check: "python tests/check_cases.py <all lead files in send order> exits 0 before every run"
 
 critical_failures:   # one occurrence in any run = FAIL
   CF1_reply_sent_without_approval: >-
