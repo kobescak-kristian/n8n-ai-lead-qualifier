@@ -60,7 +60,18 @@
         "url": "https://api.hubapi.com/crm/v3/objects/contacts?limit=100&properties=email",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "hubspotAppToken",
-        "options": {}
+        "options": {
+          "pagination": {
+            "pagination": {
+              "paginationMode": "responseContainsNextURL",
+              "nextURL": "={{ $response.body.paging.next.link }}",
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ !$response.body.paging || !$response.body.paging.next }}",
+              "limitPagesFetched": true,
+              "maxRequests": 50
+            }
+          }
+        }
       },
       "id": "1171779b-d8f3-4d75-af1c-adcaaf82793a",
       "name": "HubSpot contacts",
@@ -73,7 +84,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const h = $input.first().json;\nconst emails = (h.results || []).map((c) => (c.properties && c.properties.email) || '').filter(Boolean);\nreturn [{ json: {\n  log: $('Collect rows').first().json.log,\n  hubspot_emails: emails,\n  hubspot_truncated: Boolean(h.paging && h.paging.next),\n} }];\n"
+        "jsCode": "// One item per HubSpot page (the request follows paging.next up to 50 pages of 100).\nconst pages = $input.all().map((i) => i.json);\nconst emails = pages.flatMap((h) => (h.results || []).map((c) => (c.properties && c.properties.email) || '')).filter(Boolean);\nconst last = pages[pages.length - 1] || {};\nreturn [{ json: {\n  log: $('Collect rows').first().json.log,\n  hubspot_emails: emails,\n  hubspot_pages: pages.length,\n  hubspot_truncated: Boolean(last.paging && last.paging.next),\n} }];"
       },
       "id": "1c9ba9f4-1e72-4d24-be23-9a8afa52c5c9",
       "name": "Build report",

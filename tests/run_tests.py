@@ -40,11 +40,24 @@ REPORT_KEY = ("LEAD_REPORT_KEY", "Lead report webhook")
 _keys = {}
 
 
+def user_variable(var):
+    """A Windows user variable set after this shell started (registry), else None."""
+    if sys.platform != "win32":
+        return None
+    import winreg
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as k:
+            return winreg.QueryValueEx(k, var)[0]
+    except OSError:
+        return None
+
+
 def auth(key):
-    """Header for a protected webhook. Read from the environment or asked once."""
+    """Header for a protected webhook. Read from the environment, the user variable, or asked once."""
     var, label = key
     if var not in _keys:
-        _keys[var] = os.environ.get(var) or getpass.getpass(f"{label} key ({var}, input hidden): ")
+        _keys[var] = (os.environ.get(var) or user_variable(var)
+                      or getpass.getpass(f"{label} key ({var}, input hidden): "))
     return {KEY_HEADER: _keys[var]}
 
 
@@ -120,6 +133,8 @@ def cmd_report(run_file, base):
     report = get(base + REPORT_PATH, headers=auth(REPORT_KEY))
     log = {str(r["id"]): r for r in report.get("log", [])}
     crm_emails = {e.strip().lower() for e in report.get("hubspot_emails", [])}
+    if report.get("hubspot_truncated"):
+        print("WARNING: the HubSpot list was cut off; 'should not be there' is not complete.")
 
     rows = run["rows"]
     n = len(rows)

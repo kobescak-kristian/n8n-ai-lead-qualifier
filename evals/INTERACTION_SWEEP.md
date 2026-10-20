@@ -24,7 +24,7 @@ e-mail is a duplicate, whatever happened to the first one.
 | I8 | Same company, different e-mails | Two separate leads (the key is the e-mail) | By design; out of scope for the gate |
 | I9 | Two forms with the same e-mail at the same moment (double click on submit) | Both can pass the lookup before either is logged, so both are processed | **Known limit**, out of scope: the runner sends one lead at a time; n8n data tables have no lock |
 | I10 | A Slack button clicked twice, or approve then reject | n8n resumes a waiting step once; the second click changes nothing | Trigger pass (see below), by hand |
-| I11 | No click for 24 hours | The wait ends (`limitWaitTime` 24 h); expected: the "not approved" branch, nothing sent, nothing in HubSpot. Not verified in n8n 2.43.7 | **Out of scope** for the series (24 h wait); check once before go-live |
+| I11 | No click for 24 hours | The wait ends (`limitWaitTime` 24 h); the code writes `review_timeout` / `reply_timeout` on the "not approved" branch: nothing sent, nothing in HubSpot. Not run end to end | **Out of scope** for the series (24 h wait); check once before go-live |
 | I12 | Reviewer approves, then HubSpot fails | `crm_failed` + Slack alert, no reply drafted | Not simulated (no HubSpot fault flag); **out of scope**, shown once on 2026-10-17 smoke tests |
 | I13 | Reply draft fails the check | `draft_failed` + Slack alert, no e-mail | Not simulated; **out of scope** |
 | I14 | Lead already in HubSpot (existing contact) | Not tested: test e-mails are new in every run (`--tag`) | **Out of scope** |
@@ -48,8 +48,9 @@ depend on the sealed hold-out.
 
 ## Still to do before the series (not part of this sweep)
 
-- A grader that reads the 3 run files and applies the gate formula (case passes only
-  if routed as expected in all 3 runs; CF1/CF2 from the report); today
-  `tests/run_tests.py report` grades one run.
+- Done 2026-10-20: `evals/grade_series.py` grades the 3 runs with the gate formula
+  (`evals/test_grade_series.py`, planted results). The report workflow now pages
+  through all HubSpot contacts (before: first 100 only, so CF2 could miss leads once
+  the series adds about 100 contacts); the grader stops if the list is still cut off.
 - Written preflight `evals/PREFLIGHT.md` (build-checks (c)).
 - Red teams: gate red team and build red team by fresh sessions (level Critical).

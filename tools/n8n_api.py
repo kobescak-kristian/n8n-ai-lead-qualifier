@@ -7,8 +7,8 @@
                                        the workflows, and whether live ICP / model / effort match the repo
     python tools/n8n_api.py apply     live lead qualifier: ICP text, model and effort from the repo
                                        file, Header Auth on the "New lead" webhook; live report: Header Auth on
-                                       "Report request"; all five renamed (NAMES); published
-                                       workflows are published again
+                                       "Report request" and the REPO_NODES parameters from the repo file;
+                                       all five renamed (NAMES); published workflows are published again
     python tools/n8n_api.py export    live lead-qualifier workflows -> workflows/*.json, credentials and
                                        personal e-mail settings stripped
 
@@ -152,6 +152,18 @@ def repo_settings():
     sys.exit(f"Settings fields {REPO_SETTINGS} not all found in workflows/lead-qualifier.json")
 
 
+# Nodes whose parameters the repo file decides (credentials stay as they are in n8n).
+REPO_NODES = {"Q116LeadReport01": ("HubSpot contacts", "Build report")}
+
+
+def repo_node_params(wid):
+    w = json.loads((ROOT / "workflows" / FILES[wid]).read_text(encoding="utf-8"))
+    params = {n["name"]: n["parameters"] for n in w["nodes"] if n["name"] in REPO_NODES.get(wid, ())}
+    if set(params) != set(REPO_NODES.get(wid, ())):
+        sys.exit(f"{wid}: nodes {REPO_NODES[wid]} not all found in workflows/{FILES[wid]}")
+    return params
+
+
 def cmd_apply():
     wanted = repo_settings()
     creds = webhook_credentials()
@@ -165,7 +177,13 @@ def cmd_apply():
         node_name, cred_name = WEBHOOKS.get(wid, (None, None))
         c = creds.get(cred_name)
         found = 0
+        from_repo = repo_node_params(wid)
         for n in w["nodes"]:
+            if n["name"] in from_repo:
+                if n["parameters"] != from_repo[n["name"]]:
+                    print(f"  {n['name']}: parameters changed from the repo file")
+                n["parameters"] = from_repo[n["name"]]
+                found += 1
             if n["name"] == node_name and n["type"] == "n8n-nodes-base.webhook":
                 n["parameters"]["authentication"] = "headerAuth"
                 n["credentials"] = {"httpHeaderAuth": {"id": c["id"], "name": c["name"]}}
@@ -178,7 +196,8 @@ def cmd_apply():
                                   else f" {a['value']!r} -> {wanted[a['name']]!r}"))
                         a["value"] = wanted[a["name"]]
                         found += 1
-        if found != {"Q116LeadQualify1": 1 + len(REPO_SETTINGS), "Q116LeadReport01": 1}.get(wid, 0):
+        if found != {"Q116LeadQualify1": 1 + len(REPO_SETTINGS),
+                     "Q116LeadReport01": 1 + len(REPO_NODES["Q116LeadReport01"])}.get(wid, 0):
             sys.exit(f"{wid}: expected nodes not found ({found})")
         settings = {k: v for k, v in (w.get("settings") or {}).items() if k in SETTINGS_ALLOWED}
         call("PUT", f"/workflows/{wid}", {"name": new_name, "nodes": w["nodes"],
