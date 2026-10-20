@@ -60,6 +60,7 @@ rate_cases:
     - tests/leads.json, LLM-routed only (30): all except broken_input, duplicate, simulated_*
     - tests/leads-set2.json (20)
     - tests/leads-injection.json (5, added 2026-10-20 after gate red team finding 1; low_fit only, owner 2026-10-20)
+    - tests/leads-guard.json (4, added 2026-10-20 after the build red team; labels pending owner)
   holdout: >-
     At least 26 LLM-routed cases written by a separate session that does not
     build the workflow (about 30% of all cases), sealed outside the repo as a
@@ -71,6 +72,7 @@ rate_cases:
     - tests/leads.json
     - tests/leads-set2.json
     - tests/leads-injection.json
+    - tests/leads-guard.json
     - tests/leads-code.json
 
 code_checks:   # same input, same output: 100% required, a miss is a bug
@@ -125,6 +127,8 @@ known_limits:   # test-scope statement (section 9)
   - "who clicked an approval is not recorded: n8n's approval link approves whoever opens it (ADR-001)"
   - "two forms with the same e-mail at the same moment can both be processed (interaction I9)"
   - "the server-side model fallback may answer some calls; the grader lists them (answered_by_other_model)"
+  - "the code guard is a narrow word list (English, German, French, Spanish, Italian, Portuguese, Croatian; cleaned of hidden characters and HTML entities); other languages and reworded instructions rely on the AI's own manipulation flag; the grader lists every guard stop (stopped_by_code_guard)"
+  - "an AI answer of fit_score 0 with confidence 0 passes the answer check and is routed as a normal low score (seen once with Haiku, never with Opus)"
 
 preflight_notes:
   - "never run the 'test reset lead_log' workflow during a series: the grader needs every log row of all runs"
@@ -136,6 +140,8 @@ preflight_notes:
   - "grade the trigger pass within 24 hours of its send"
   - "live Settings demo_inbox and from_email are set (the export blanks them, so the live-vs-repo check cannot see them)"
   - "after tools/n8n_api.py apply, run export and commit, so live = repo"
+  - "stop every waiting execution from earlier dev and smoke runs in n8n before run 1, and note the time of the series' first Slack message (old buttons carry the same company names as the trigger leads)"
+  - "exactly one mock server: netstat -ano | findstr :8099 shows one LISTENING line, started with --extra <holdout_sites.json>; one hold-out host answers 200 from http://127.0.0.1:8099/<host>"
 
 not_claimed:
   - reply-draft quality (not measured; the README says so; owner decision 2026-10-20)

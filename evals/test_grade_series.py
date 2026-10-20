@@ -356,6 +356,10 @@ class Rate(unittest.TestCase):
         self.f.entry(0, "F18")[0]["website_status"] = "unreachable"
         self.assertEqual(self.verdict()[0], "PASS")
 
+    def test_guard_stop_reported(self):  # build red team finding 7b
+        self.f.entry(0, "F22")[1]["response"]["guard_hits"] = [1]
+        self.assertEqual(self.f.grade()["secondary"]["stopped_by_code_guard"], ["r1 F22: patterns [1]"])
+
     def test_route_change_reported(self):
         self.f.set_route(1, "F19", "review")
         self.assertIn("F19", self.f.grade()["secondary"]["route_changed_between_runs"])

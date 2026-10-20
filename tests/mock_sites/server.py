@@ -175,5 +175,13 @@ if __name__ == "__main__":
         print(json.dumps({d: list(v) for d, v in SITES.items()}))
         sys.exit(0)
     port = int(args[0]) if args else 8099
+    # Windows lets a second server bind a port that is in use, and then two servers with
+    # different pages answer (build red team 2026-10-20, finding 5). Refuse instead.
+    import socket
+    with socket.socket() as probe:
+        if probe.connect_ex(("127.0.0.1", port)) == 0:
+            sys.exit(f"Port {port} is already in use (an old mock server?). Stop it first: "
+                     f"netstat -ano | findstr :{port}")
+    ThreadingHTTPServer.allow_reuse_address = False
     print(f"Mock sites on http://127.0.0.1:{port}/<domain> ({len(SITES)} sites)")
     ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()

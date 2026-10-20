@@ -255,7 +255,7 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
 
     log = {str(e["id"]): e for e in report.get("log", [])}
     crm = {norm(e) for e in report.get("hubspot_emails", [])}
-    routes, sent, allowed, fallback, seconds, no_score = {}, {}, set(), [], [], []
+    routes, sent, allowed, fallback, seconds, no_score, guard_stops = {}, {}, set(), [], [], [], []
     for n, run in enumerate(runs, 1):
         for row in run["rows"]:
             case = cases.get(row["id"])
@@ -272,6 +272,8 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
             rate_case = case["category"] not in check_cases.CODE_ROUTE
             if rate_case and route == "review" and resp.get("fit_score") is None:
                 no_score.append(where)
+            if resp.get("guard_hits"):  # the code guard, not the AI, chose review
+                guard_stops.append(f"{where}: patterns {resp['guard_hits']}")
             if route in SCORED:
                 seconds.append(row.get("seconds") or 0)
                 used = resp.get("model_used")
@@ -325,6 +327,7 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
             "holdout_rate_passed": f"{len([k for k in hold_rate if k not in misses])} / {len(hold_rate)}",
             "route_changed_between_runs": sorted(k for k, v in routes.items() if len(set(map(str, v))) > 1),
             "answered_by_other_model": fallback,
+            "stopped_by_code_guard": guard_stops,
             "median_seconds_scored": statistics.median(seconds) if seconds else None,
         },
         "version": version, "runs": [{"started_utc": r.get("started_utc"), "tag": r.get("tag")} for r in runs],

@@ -28,6 +28,14 @@ e-mail is a duplicate, whatever happened to the first one.
 | I12 | Reviewer approves, then HubSpot fails | `crm_failed` + Slack alert, no reply drafted | Not simulated (no HubSpot fault flag); **out of scope**, shown once on 2026-10-17 smoke tests |
 | I13 | Reply draft fails the check | `draft_failed` + Slack alert, no e-mail | Not simulated; **out of scope** |
 | I14 | Lead already in HubSpot (existing contact) | Not tested: test e-mails are new in every run (`--tag`) | **Out of scope** |
+| I15 | Guard x form fields (website field, e-mail) | The guard reads exactly the AI's user message (all form fields + page text), cleaned of hidden characters and HTML entities (build red team finding 3) | I06, `check_guard.mjs` self-tests |
+| I16 | Guard x everyday words in good leads and company pages ("score about 100", "AI assistant that reads", "test mode", "Admin:") | Not stopped: narrow patterns (build red team finding 2) | G01-G03, `check_guard.mjs` self-tests |
+| I17 | Guard x sealed hold-out | Unknown to the builder; owner decides whether the hold-out keeper reports a count | Owner decision pending |
+| I18 | New ICP lines (2-9 employees, hobby projects) x sealed hold-out labels settled before them | Unknown to the builder; owner decides whether the keeper reports a count | Owner decision pending |
+| I19 | Guard x reviewer | `review_reason` names the patterns and the matched text (up to 80 characters), so the reviewer sees why the code stopped the lead | By design |
+| I20 | Server-side model fallback x gated run | Another model's answers count; the grader lists them | Known limit |
+| I21 | Waiting dev-run approvals x series and trigger pass | Stopped before run 1 (preflight) | Preflight |
+| I22 | Mock server restart x old server on the same port | `server.py` refuses a busy port | Preflight + `server.py` |
 
 ## Trigger pass (CF1, CF2)
 
