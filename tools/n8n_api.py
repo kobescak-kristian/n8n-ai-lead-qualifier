@@ -3,10 +3,10 @@
     python tools/n8n_api.py keys      creates the two webhook credentials in n8n with new random
                                        keys and stores the same keys in the Windows user variables
                                        LEAD_QUALIFIER_KEY and LEAD_REPORT_KEY (never printed)
-    python tools/n8n_api.py check     the two webhook credentials (names and ids only)
-                                       and the state of the lead-qualifier workflows
-    python tools/n8n_api.py apply     live lead qualifier: ICP text from the repo file, Header Auth
-                                       on the "New lead" webhook; live report: Header Auth on
+    python tools/n8n_api.py check     the two webhook credentials (names and ids only), the state of
+                                       the workflows, and whether live ICP / model / effort match the repo
+    python tools/n8n_api.py apply     live lead qualifier: ICP text, model and effort from the repo
+                                       file, Header Auth on the "New lead" webhook; live report: Header Auth on
                                        "Report request"; all five renamed (NAMES); published
                                        workflows are published again
     python tools/n8n_api.py export    live lead-qualifier workflows -> workflows/*.json, credentials and
@@ -103,6 +103,15 @@ def cmd_check():
         hooks = [f"{n['name']}: auth={n['parameters'].get('authentication', 'none')}"
                  for n in w["nodes"] if n["type"] == "n8n-nodes-base.webhook"]
         print(f"workflow: {wid}  active={w.get('active')}  {'; '.join(hooks)}")
+        if wid == "Q116LeadQualify1":
+            wanted = repo_settings()
+            for n in w["nodes"]:
+                if n["name"] == "Settings":
+                    for a in n["parameters"]["assignments"]["assignments"]:
+                        if a["name"] in wanted:
+                            same = "same as repo" if a["value"] == wanted[a["name"]] else "DIFFERS from repo"
+                            shown = "" if a["name"] == "icp" else f"={a['value']!r}"
+                            print(f"  Settings.{a['name']}{shown}  {same}")
 
 
 KEY_VARS = {"n8n-lead-qualifier-webhook": "LEAD_QUALIFIER_KEY",
@@ -129,17 +138,22 @@ def cmd_keys():
     ctypes.windll.user32.SendMessageTimeoutW(0xFFFF, 0x001A, 0, "Environment", 0x0002, 5000, None)
 
 
-def repo_icp():
+REPO_SETTINGS = ("icp", "model", "effort")  # Settings fields the repo file decides
+
+
+def repo_settings():
     w = json.loads((ROOT / "workflows" / "lead-qualifier.json").read_text(encoding="utf-8"))
     for n in w["nodes"]:
         if n["name"] == "Settings":
-            for a in n["parameters"]["assignments"]["assignments"]:
-                if a["name"] == "icp":
-                    return a["value"]
-    sys.exit("icp not found in workflows/lead-qualifier.json")
+            found = {a["name"]: a["value"] for a in n["parameters"]["assignments"]["assignments"]
+                     if a["name"] in REPO_SETTINGS}
+            if set(found) == set(REPO_SETTINGS):
+                return found
+    sys.exit(f"Settings fields {REPO_SETTINGS} not all found in workflows/lead-qualifier.json")
 
 
 def cmd_apply():
+    wanted = repo_settings()
     creds = webhook_credentials()
     for _, cred_name in WEBHOOKS.values():
         c = creds.get(cred_name)
@@ -158,10 +172,13 @@ def cmd_apply():
                 found += 1
             if wid == "Q116LeadQualify1" and n["name"] == "Settings":
                 for a in n["parameters"]["assignments"]["assignments"]:
-                    if a["name"] == "icp":
-                        a["value"] = repo_icp()
+                    if a["name"] in wanted:
+                        if a["value"] != wanted[a["name"]]:
+                            print(f"  Settings.{a['name']}: changed" + ("" if a["name"] == "icp"
+                                  else f" {a['value']!r} -> {wanted[a['name']]!r}"))
+                        a["value"] = wanted[a["name"]]
                         found += 1
-        if found != {"Q116LeadQualify1": 2, "Q116LeadReport01": 1}.get(wid, 0):
+        if found != {"Q116LeadQualify1": 1 + len(REPO_SETTINGS), "Q116LeadReport01": 1}.get(wid, 0):
             sys.exit(f"{wid}: expected nodes not found ({found})")
         settings = {k: v for k, v in (w.get("settings") or {}).items() if k in SETTINGS_ALLOWED}
         call("PUT", f"/workflows/{wid}", {"name": new_name, "nodes": w["nodes"],
