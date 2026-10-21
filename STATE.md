@@ -16,6 +16,7 @@ n8n AI lead qualifier with human review in Slack; Upwork portfolio build (Q-116)
 *(New entries on top. Phase closes require evidence: exit codes,
 commit hashes, eval numbers.)*
 
+- **2026-10-21** — Live apply of 6b20de3 + df76cc4 (`apply` now also pushes "Build scoring request"; before, the score bands did not reach live n8n): `live_differs_from_repo()` -> [], export unchanged. Development runs dev1021a-c (81 visible cases each, Opus 5.5 low, not gated): `grade_series.py rate --dev` -> rate 58/59 (U01 missed in run 3 only, score 38; runs 1-2 scored 42 and 45), code checks 22/22, CF1/CF2/CF3 none, 0 rows without an AI score, guard stops only the 9 injection cases and C08, model_used Opus in all rows, median 3.9 s; DEV PASS. Demo inbox: no DEMO reply since 01:55 (owner checked; last e-mail 00:41, not from this build). Owner decision on U01: accept as it is, no prompt change. Wording approved by the owner.
 - **2026-10-21** — Owner answers after the build red team. Repo files only; the live apply waits for Q-117's "n8n free".
   - Labels: G01-G03 = high_fit, I06 = low_fit (`tests/leads-guard.json`).
   - ICP, three lines added to "Possible fit, a person decides": one-person businesses with budget and a concrete process; companies of good-fit size (10 to 1,000 employees) whose stated budget is clearly too small; enterprises above 5,000 employees that can buy without formal procurement.
