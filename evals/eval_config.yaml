@@ -17,7 +17,7 @@ eval_level:
 
 system_under_test:
   workflow: workflows/lead-qualifier.json (version = repo commit named in the results entry)
-  frozen_commit: null   # set before the first gated run; all 3 runs use it
+  frozen_commit: f106cc7   # set before the first gated run; all 3 runs use it
 
 positive_class: "a case routed exactly to one of its expected routes"
 
