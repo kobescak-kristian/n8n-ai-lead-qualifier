@@ -7,6 +7,9 @@ Source: eval-gate build checks; build red team 2 (`evals/redteam-build2-2026-10-
 ## A. Before the freeze (no n8n)
 
 1. Owner decisions for the open red team findings are recorded in STATE.md.
+   Optional, before step 3 (owner decision 2026-10-21, build red team 2 finding 5): a practice trigger pass on the
+   current build with the owner's Slack clicks (a `tdev<date>` tag; steps 18-21 without the gate), graded with
+   `grade_series.py trigger`. It tests the click path before the freeze; its result does not count for the gate.
 2. Offline checks, all OK:
    - `python -m unittest evals.test_grade_series tests.test_check_cases`
    - `node tests/check_guard.mjs` (exit 0)
@@ -38,7 +41,7 @@ Source: eval-gate build checks; build red team 2 (`evals/redteam-build2-2026-10-
     "(N sites)": N must be above 48 (48 repo pages + the hold-out pages). `netstat -ano | findstr :8099` shows
     exactly one LISTENING line.
 13. Dry run: `python tests/run_tests.py send --leads tests/leads-guard.json --tag dry<date>`. The run file shows
-    commit Y, `dirty: false`, `live_differs_from_repo: []`, model `claude-opus-5-5`, 4 routes. Not graded.
+    commit Y, `dirty: false`, `live_differs_from_repo: []`, model `claude-opus-5-5`, 4 rows, each with a route. Not graded.
 
 ## D. Rate pass (3 runs, nobody clicks in Slack)
 

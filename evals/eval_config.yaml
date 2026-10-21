@@ -67,7 +67,7 @@ rate_cases:
     zip; its SHA-256 is committed in evals/holdout_commitment.json before the
     gated series. The builder does not open it before the final run.
   total_required: 76
-  holdout_sealed: "evals/holdout_commitment.json, 30 LLM-routed + 14 code-path cases (2026-10-20); visible 59 + hold-out 30 = 89 rate cases"
+  holdout_sealed: "evals/holdout_commitment.json, 30 LLM-routed + 14 code-path cases (2026-10-20; re-sealed as v2 on 2026-10-21, 2 cases replaced, same counts); visible 59 + hold-out 30 = 89 rate cases"
   send_order:   # the grader requires exactly these files, in this order, then one hold-out file
     - tests/leads.json
     - tests/leads-set2.json

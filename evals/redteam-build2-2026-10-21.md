@@ -218,7 +218,7 @@ Findings: 10; changed the build: 0; changed the test: 0; no change: 10
 
 ## Builder response (2026-10-21)
 
-1. Test: the grader accepts a run commit that only sets `frozen_commit` (+ STATE.md) after the frozen commit, and reads the thresholds from the runs' commit; 2 unit tests (c5ab46b).
+1. Test: the grader accepts a run commit that only sets `frozen_commit` (+ STATE.md) after the frozen commit, and reads the thresholds from the runs' commit; 3 unit tests (c5ab46b).
 2. Test: the second Approve click moved from TA1 to TB1, which ends with "Don't send"; a wrong send now shows as CF1.
 3. Owner decision 2026-10-21: the 2 hold-out cases described to the builder are replaced by the keeper with 2 new blind cases (labels confirmed by the owner); the hold-out is sealed again with a new SHA-256.
 4. No change: the owner accepted U01 as a likely miss; recorded in STATE.
