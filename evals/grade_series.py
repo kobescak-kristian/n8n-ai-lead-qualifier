@@ -353,7 +353,8 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
 
     rate = {k: v for k, v in routes.items() if cases[k]["category"] not in check_cases.CODE_ROUTE}
     code = {k: v for k, v in routes.items() if k not in rate}
-    misses = sorted(k for k, v in rate.items() if not all(r in cases[k]["expected"] for r in v))
+    # a rate case with no scored row in any run was never judged: a miss, not a pass
+    misses = sorted(k for k, v in rate.items() if not v or not all(r in cases[k]["expected"] for r in v))
     code_fails = sorted(k for k, v in code.items() if not all(r in cases[k]["expected"] for r in v))
     per_type = {t: sum(1 for k in code if cases[k]["category"] == t) for t in check_cases.CODE_ROUTE}
     short = {t: k for t, k in per_type.items() if k < cfg["code_checks"]["minimum_per_type"]}

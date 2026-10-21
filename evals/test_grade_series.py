@@ -370,6 +370,13 @@ class Rate(unittest.TestCase):
         v, r = self.verdict()
         self.assertEqual((v, r["misses"], r["rate_rows_without_ai_score"]), ("PASS", [], ["r1 F05"]))
 
+    def test_case_never_scored_is_a_miss(self):  # checkpoint review becd5ee, note 1
+        for run in range(3):
+            self.f.set_route(run, "F05", "review", fit_score=None)
+        v, r = self.verdict()
+        self.assertEqual((r["misses"], len(r["rate_rows_without_ai_score"]), r["rate_passed"]),
+                         (["F05"], 3, r["rate_cases"] - 1))
+
     def test_frozen_commit_may_be_the_parent(self):  # build red team 2 finding 1
         self.f.ctx_frozen_ok = lambda frozen, commit: commit == "child1"
         for r in self.f.runs:
