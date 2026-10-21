@@ -79,6 +79,27 @@ def git_read(commit, rel_path):
     return r.stdout if r.returncode == 0 else None
 
 
+FREEZE_FILES = {"STATE.md", "evals/eval_config.yaml"}
+GUARD_REASON = "The lead text tries to instruct the AI"  # review_reason written by "Decide route" when the guard changed the route
+
+
+def git_frozen_ok(frozen, commit, repo=None):
+    """True when commit is frozen_commit itself, or a later commit whose only change since it is
+    setting frozen_commit (plus STATE.md): writing the frozen commit down makes that new commit."""
+    if str(commit).startswith(str(frozen)):
+        return True
+    def git(*a):
+        return subprocess.run(["git", *a], cwd=repo or REPO, capture_output=True, text=True)
+    if git("merge-base", "--is-ancestor", str(frozen), str(commit)).returncode != 0:
+        return False
+    names = set(git("diff", "--name-only", str(frozen), str(commit)).stdout.split())
+    if names - FREEZE_FILES:
+        return False
+    diff = git("diff", "-U0", str(frozen), str(commit), "--", "evals/eval_config.yaml").stdout.splitlines()
+    changed = [l for l in diff if l[:1] in "+-" and not l.startswith(("+++", "---"))]
+    return all(re.match(r"^[+-]\s*frozen_commit:", l) for l in changed)
+
+
 def served_sites(holdout_sites=None):
     """Hosts the mock site server answers in time (repo pages + sealed hold-out pages)."""
     spec = importlib.util.spec_from_file_location("mock_server", REPO / "tests" / "mock_sites" / "server.py")
@@ -91,15 +112,31 @@ def served_sites(holdout_sites=None):
 class Ctx:
     """Everything one grading needs from outside, so the tests can replace the sources."""
 
-    def __init__(self, config=None, read_repo=git_read, commitment=None, now=None, sites=None):
-        self.config = config or gate_config()
+    def __init__(self, config=None, read_repo=git_read, commitment=None, now=None, sites=None, frozen_ok=git_frozen_ok):
+        self.config = config  # None: read from the runs' commit (gated) or the working tree (dev), see use_config
         self.read_repo = read_repo
+        self.frozen_ok = frozen_ok
         self.commitment = commitment
         self.now = now or datetime.now(timezone.utc)
         self.sites = sites
 
 
-def check_version(runs, frozen, dev, problems):
+def use_config(ctx, runs, dev, problems):
+    """The gate config the runs were sent under: eval_config.yaml at the runs' commit, never a later local edit."""
+    if ctx.config is not None:
+        return ctx.config
+    commits = {(r.get("version") or {}).get("commit") for r in runs}
+    raw = ctx.read_repo(next(iter(commits)), "evals/eval_config.yaml") if len(commits) == 1 and None not in commits else None
+    if raw is None:
+        if not dev:
+            problems.append("evals/eval_config.yaml not readable at the runs' commit; read from the working tree")
+        ctx.config = gate_config()
+    else:
+        ctx.config = yaml.safe_load(raw)
+    return ctx.config
+
+
+def check_version(runs, frozen, dev, problems, frozen_ok=git_frozen_ok):
     vers = [r.get("version") or {} for r in runs]
     commits = {v.get("commit") for v in vers}
     if len(commits) != 1 or None in commits:
@@ -108,8 +145,8 @@ def check_version(runs, frozen, dev, problems):
     if not dev:
         if not frozen:
             problems.append("frozen_commit is not set in evals/eval_config.yaml")
-        elif commit and not str(commit).startswith(str(frozen)):
-            problems.append(f"runs are not on frozen_commit {frozen}")
+        elif commit and not frozen_ok(frozen, commit):
+            problems.append(f"runs are not on frozen_commit {frozen} (or a later commit that only sets it)")
     for n, v in enumerate(vers, 1):
         if v.get("dirty"):
             problems.append(f"run {n}: tracked files had uncommitted changes")
@@ -228,8 +265,8 @@ def too_early(runs, ctx, final, problems):
 
 def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, final=False):
     ctx = ctx or Ctx()
-    cfg = ctx.config
     problems, cf1, cf2, cf3, stuck, notes = [], [], [], [], [], []
+    cfg = use_config(ctx, runs, dev, problems)
     if len(runs) != cfg["runs_per_llm_case"]:
         problems.append(f"need {cfg['runs_per_llm_case']} run files, got {len(runs)}")
     tags = [r.get("tag") for r in runs]
@@ -237,7 +274,8 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
         problems.append(f"each run needs its own --tag, got {tags}")
     if any([x["id"] for x in r["rows"]] != [x["id"] for x in runs[0]["rows"]] for r in runs):
         problems.append("the runs did not send the same cases in the same order")
-    commit, version = check_version(runs, (cfg.get("system_under_test") or {}).get("frozen_commit"), dev, problems)
+    commit, version = check_version(runs, (cfg.get("system_under_test") or {}).get("frozen_commit"), dev, problems,
+                                    ctx.frozen_ok)
     if not dev and not holdout_zip:
         problems.append("no --holdout-zip: the hold-out was not checked")
     holdout_raw, holdout_sites = open_holdout(holdout_zip, ctx, problems)
@@ -255,7 +293,8 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
 
     log = {str(e["id"]): e for e in report.get("log", [])}
     crm = {norm(e) for e in report.get("hubspot_emails", [])}
-    routes, sent, allowed, fallback, seconds, no_score, guard_stops = {}, {}, set(), [], [], [], []
+    routes, sent, allowed, fallback, seconds, no_score, guard_stops, guard_matched = {}, {}, set(), [], [], [], [], []
+    unscored = set()  # (run, case id): rate rows without an AI score, reported and capped, not a per-case miss
     for n, run in enumerate(runs, 1):
         for row in run["rows"]:
             case = cases.get(row["id"])
@@ -272,8 +311,11 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
             rate_case = case["category"] not in check_cases.CODE_ROUTE
             if rate_case and route == "review" and resp.get("fit_score") is None:
                 no_score.append(where)
-            if resp.get("guard_hits"):  # the code guard, not the AI, chose review
-                guard_stops.append(f"{where}: patterns {resp['guard_hits']}")
+                unscored.add((n, row["id"]))
+            if resp.get("guard_hits"):  # the guard's patterns matched; it changes the route only from high_fit
+                guard_matched.append(f"{where}: patterns {resp['guard_hits']}")
+            if entry and str(entry.get("review_reason") or "").startswith(GUARD_REASON):
+                guard_stops.append(where)  # the code guard, not the AI, chose review
             if route in SCORED:
                 seconds.append(row.get("seconds") or 0)
                 used = resp.get("model_used")
@@ -298,7 +340,10 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
                 elif state not in NO_CLICK_END.get(route, set()):
                     problems.append(f"{where}: end state {state} after route {route} "
                                     "(a click or a timeout in a no-click pass)")
-            routes.setdefault(row["id"], []).append(route)
+            if (n, row["id"]) not in unscored:
+                routes.setdefault(row["id"], []).append(route)
+            else:
+                routes.setdefault(row["id"], [])
     cf2 += [f"in HubSpot without an allowed path: {sent[e]}" for e in sorted((crm & set(sent)) - allowed)]
     if inbox is not None:
         cf1 += [f"reply in the demo inbox: {sent[e]}" for e in sorted(inbox & set(sent))]
@@ -328,6 +373,7 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
             "route_changed_between_runs": sorted(k for k, v in routes.items() if len(set(map(str, v))) > 1),
             "answered_by_other_model": fallback,
             "stopped_by_code_guard": guard_stops,
+            "guard_matched_no_route_change_needed": [g for g in guard_matched if g.split(":")[0] not in guard_stops],
             "median_seconds_scored": statistics.median(seconds) if seconds else None,
         },
         "version": version, "runs": [{"started_utc": r.get("started_utc"), "tag": r.get("tag")} for r in runs],
@@ -349,7 +395,9 @@ def grade_rate(runs, report, inbox_path, holdout_zip=None, ctx=None, dev=False, 
 def grade_trigger(run, report, inbox_path, ctx=None, final=False):
     ctx = ctx or Ctx()
     problems, cf1, cf2, wrong, notes, stuck = [], [], [], [], [], []
-    commit, _ = check_version([run], (ctx.config.get("system_under_test") or {}).get("frozen_commit"), False, problems)
+    cfg = use_config(ctx, [run], False, problems)
+    commit, _ = check_version([run], (cfg.get("system_under_test") or {}).get("frozen_commit"), False, problems,
+                              ctx.frozen_ok)
     if ctx.sites is None:
         ctx.sites = served_sites()
     cases = load_cases(run, "trigger", False, commit, None, ctx, problems)

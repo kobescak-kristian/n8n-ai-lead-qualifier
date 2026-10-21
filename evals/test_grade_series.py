@@ -93,6 +93,7 @@ class Fixture:
         self.cfg = config()
         self.now = FINISHED + timedelta(minutes=30)
         self.sites = {"served.example.com"}
+        self.ctx_frozen_ok = lambda frozen, commit: str(commit).startswith(str(frozen))
 
     def entry(self, run, case_id):
         row = next(r for r in self.runs[run]["rows"] if r["id"] == case_id)
@@ -119,7 +120,7 @@ class Fixture:
 
     def grade(self, zip_=True, dev=False, final=False):
         ctx = g.Ctx(config=self.cfg, read_repo=lambda commit, f: self.files.get(f), commitment=self.commitment,
-                    now=self.now, sites=self.sites)
+                    now=self.now, sites=self.sites, frozen_ok=self.ctx_frozen_ok)
         return g.grade_rate(self.runs, self.report, str(self.inbox), str(self.zip) if zip_ else None,
                             ctx, dev=dev, final=final)
 
@@ -356,9 +357,34 @@ class Rate(unittest.TestCase):
         self.f.entry(0, "F18")[0]["website_status"] = "unreachable"
         self.assertEqual(self.verdict()[0], "PASS")
 
-    def test_guard_stop_reported(self):  # build red team finding 7b
-        self.f.entry(0, "F22")[1]["response"]["guard_hits"] = [1]
-        self.assertEqual(self.f.grade()["secondary"]["stopped_by_code_guard"], ["r1 F22: patterns [1]"])
+    def test_guard_stop_reported(self):  # build red team finding 7b; build red team 2 finding 8
+        self.f.entry(0, "F22")[1]["response"]["guard_hits"] = [1]  # matched, but the route was not high_fit
+        sec = self.f.grade()["secondary"]
+        self.assertEqual((sec["stopped_by_code_guard"], sec["guard_matched_no_route_change_needed"]),
+                         ([], ["r1 F22: patterns [1]"]))
+        self.f.entry(0, "F22")[0]["review_reason"] = g.GUARD_REASON + ' (code check, patterns 1: "x"), so a person decides'
+        self.assertEqual(self.f.grade()["secondary"]["stopped_by_code_guard"], ["r1 F22"])
+
+    def test_row_without_ai_score_is_not_a_case_miss(self):  # build red team 2 finding 9, owner rule 2026-10-20
+        self.f.set_route(0, "F05", "review", fit_score=None)  # F05 expects high_fit only
+        v, r = self.verdict()
+        self.assertEqual((v, r["misses"], r["rate_rows_without_ai_score"]), ("PASS", [], ["r1 F05"]))
+
+    def test_frozen_commit_may_be_the_parent(self):  # build red team 2 finding 1
+        self.f.ctx_frozen_ok = lambda frozen, commit: commit == "child1"
+        for r in self.f.runs:
+            r["version"]["commit"] = "child1"
+        self.assertEqual(self.verdict()[0], "PASS")
+        self.f.ctx_frozen_ok = lambda frozen, commit: False
+        self.assertEqual(self.verdict()[0], "INVALID RUN")
+
+    def test_config_read_from_the_runs_commit(self):  # build red team 2 finding 1, second part
+        import yaml
+        cfg = dict(self.f.cfg, gated_number={"minimum_cases": 76, "allowed_misses": 0, "ai_step_cap": 3})
+        self.f.files["evals/eval_config.yaml"] = yaml.safe_dump(cfg).encode()
+        self.f.cfg = None  # nothing passed in: the grader reads the config at the runs' commit
+        self.f.set_route(0, "F05", "review")
+        self.assertEqual(self.verdict()[0], "FAIL")  # 1 miss > allowed_misses 0 at that commit
 
     def test_route_change_reported(self):
         self.f.set_route(1, "F19", "review")
@@ -493,6 +519,41 @@ class Trigger(unittest.TestCase):
         self.assertEqual(self.grade()["verdict"], "INVALID RUN")
         self.assertEqual(self.grade(final=True)["verdict"], "FAIL")
 
+
+
+class FrozenGit(unittest.TestCase):  # build red team 2 finding 1: the real git check
+    def test_child_that_only_sets_frozen_commit(self):
+        import subprocess
+        d = Path(tempfile.mkdtemp())
+        def git(*a):
+            return subprocess.run(["git", *a], cwd=d, capture_output=True, text=True, check=True).stdout.strip()
+        try:
+            git("init", "-q")
+            git("config", "user.email", "t@example.com")
+            git("config", "user.name", "t")
+            (d / "evals").mkdir()
+            cfg = d / "evals" / "eval_config.yaml"
+            cfg.write_text("system_under_test:\n  frozen_commit: null\nallowed_misses: 3\n", encoding="utf-8")
+            (d / "a.txt").write_text("a", encoding="utf-8")
+            git("add", "-A")
+            git("commit", "-qm", "x")
+            x = git("rev-parse", "HEAD")
+            cfg.write_text(f"system_under_test:\n  frozen_commit: {x[:7]}\nallowed_misses: 3\n", encoding="utf-8")
+            (d / "STATE.md").write_text("frozen", encoding="utf-8")
+            git("add", "-A")
+            git("commit", "-qm", "freeze")
+            y = git("rev-parse", "HEAD")
+            self.assertTrue(g.git_frozen_ok(x[:7], x, repo=d))
+            self.assertTrue(g.git_frozen_ok(x[:7], y, repo=d))
+            cfg.write_text(f"system_under_test:\n  frozen_commit: {x[:7]}\nallowed_misses: 9\n", encoding="utf-8")
+            git("commit", "-qam", "threshold")
+            self.assertFalse(g.git_frozen_ok(x[:7], git("rev-parse", "HEAD"), repo=d))
+            git("reset", "-q", "--hard", y)
+            (d / "a.txt").write_text("b", encoding="utf-8")
+            git("commit", "-qam", "build change")
+            self.assertFalse(g.git_frozen_ok(x[:7], git("rev-parse", "HEAD"), repo=d))
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
 
 if __name__ == "__main__":
     unittest.main()

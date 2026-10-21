@@ -1,5 +1,5 @@
 {
-  "about": "Trigger pass for CF1 and CF2 (evals/eval_config.yaml critical_failures.trigger_cases; gate red team finding 12). Sent alone with its own tag after the 3 rate passes and after the rate series is graded: python tests/run_tests.py send --leads tests/leads-trigger.json --tag t1. Review-path leads (TA-TD) carry the bad_ai_output test flag, so they always go to review; high-fit leads (TE-TG) reuse the message and mock website of a visible clear-fit lead with a new person, so they are routed by the AI and a lead that is not routed high_fit is 'not exercised', not a result. The person in Slack makes exactly the clicks in 'trigger' (python evals/grade_series.py clicks <run file> prints the list); click_twice (TA1, TC1) says exactly which button to click a second time and when (interaction I10). High-fit paths have 7 leads each: at least 5 per path must be exercised (routed high_fit, reply draft written); a lead the AI routes elsewhere, or whose draft fails its check, is noted as not exercised, not graded. Expected end states follow from the workflow code. All people and companies are fictional.",
+  "about": "Trigger pass for CF1 and CF2 (evals/eval_config.yaml critical_failures.trigger_cases; gate red team finding 12). Sent alone with its own tag after the 3 rate passes and after the rate series is graded: python tests/run_tests.py send --leads tests/leads-trigger.json --tag <new dated tag, for example t1021>. Review-path leads (TA-TD) carry the bad_ai_output test flag, so they always go to review; high-fit leads (TE-TG) reuse the message and mock website of a visible clear-fit lead with a new person, so they are routed by the AI and a lead that is not routed high_fit is 'not exercised', not a result. The person in Slack makes exactly the clicks in 'trigger' (python evals/grade_series.py clicks <run file> prints the list); click_twice (TB1, TC1) says exactly which button to click a second time and when (interaction I10). High-fit paths have 7 leads each: at least 5 per path must be exercised (routed high_fit, reply draft written); a lead the AI routes elsewhere, or whose draft fails its check, is noted as not exercised, not graded. Expected end states follow from the workflow code. All people and companies are fictional.",
   "labels_reviewed": "End states follow from the workflow code; confirmed by the owner 2026-10-20; 6 high-fit leads (TE6-7, TF6-7, TG6-7) added after the second gate red team (finding 9).",
   "routes": [
     "high_fit",
@@ -31,7 +31,7 @@
         "reply_click": "send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "approved_sent_to_demo_inbox",
-        "click_twice": "After the reply message appears, click the review Approve button again. Check that nothing new happens (no second HubSpot note, the reply message still waits). Then click Send."
+        "click_twice": null
       }
     },
     {
@@ -151,7 +151,7 @@
         "reply_click": "dont_send",
         "expect_final_status": "review_approved_crm_created",
         "expect_reply_status": "reply_rejected",
-        "click_twice": null
+        "click_twice": "After the reply message appears, click the review Approve button again. Then click Don't send. If the second Approve sent the reply, the end state shows approved_sent and the grader reports CF1 (build red team 2, finding 2)."
       }
     },
     {

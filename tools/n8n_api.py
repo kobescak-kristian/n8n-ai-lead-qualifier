@@ -11,6 +11,10 @@
                                        all five renamed (NAMES); published workflows are published again
     python tools/n8n_api.py export    live lead-qualifier workflows -> workflows/*.json, credentials and
                                        personal e-mail settings stripped
+    python tools/n8n_api.py diff      lists the workflow files whose live version differs from the repo
+                                       file; exit 0 when live = repo, exit 1 otherwise. Run it after apply
+                                       and BEFORE any export: an export after an incomplete apply would
+                                       write the old live nodes over the new repo files
 
 The API key is read from the environment variable N8N_API_KEY_LEAD_QUALIFIER (or the same
 user variable in the Windows registry). It is never printed or written to a file.
@@ -238,6 +242,12 @@ def live_differs_from_repo():
             if export_text(wid) != (ROOT / "workflows" / fname).read_text(encoding="utf-8").replace("\r\n", "\n")]
 
 
+def cmd_diff():
+    differs = live_differs_from_repo()
+    print("live = repo" if not differs else f"live differs from the repo: {differs}")
+    sys.exit(1 if differs else 0)
+
+
 def cmd_export():
     for wid, fname in FILES.items():
         text = export_text(wid)
@@ -246,7 +256,7 @@ def cmd_export():
 
 
 if __name__ == "__main__":
-    cmds = {"keys": cmd_keys, "check": cmd_check, "apply": cmd_apply, "export": cmd_export}
+    cmds = {"keys": cmd_keys, "check": cmd_check, "apply": cmd_apply, "export": cmd_export, "diff": cmd_diff}
     if sys.argv[1:2] and sys.argv[1] in cmds:
         cmds[sys.argv[1]]()
     else:
