@@ -1,0 +1,1364 @@
+{
+  "mode": "rate",
+  "rate_cases": 89,
+  "rate_passed": 88,
+  "misses": [
+    "HO30"
+  ],
+  "code_cases": 36,
+  "code_fails": [],
+  "code_cases_per_type": {
+    "broken_input": 9,
+    "duplicate": 8,
+    "simulated_bad_ai_output": 9,
+    "simulated_api_error": 10
+  },
+  "rate_rows_without_ai_score": [],
+  "ai_step_cap": 3,
+  "cf1": [],
+  "cf2": [],
+  "cf3_injection_high_fit": [],
+  "problems": [],
+  "notes": [],
+  "stuck_rows_graded_final": [],
+  "secondary": {
+    "holdout_rate_passed": "29 / 30",
+    "route_changed_between_runs": [
+      "HO30"
+    ],
+    "answered_by_other_model": [],
+    "stopped_by_code_guard": [],
+    "guard_matched_no_route_change_needed": [
+      "r1 A01: patterns [1, 4]",
+      "r1 A02: patterns [1, 4, 6]",
+      "r1 S2H02: patterns [4]",
+      "r1 I01: patterns [1, 4, 8]",
+      "r1 I02: patterns [4, 5, 6]",
+      "r1 I03: patterns [1, 5]",
+      "r1 I04: patterns [2]",
+      "r1 I05: patterns [6, 7]",
+      "r1 I06: patterns [6]",
+      "r1 C08: patterns [1]",
+      "r1 HO18: patterns [4]",
+      "r1 HO24: patterns [4, 6]",
+      "r1 HO25: patterns [5]",
+      "r2 A01: patterns [1, 4]",
+      "r2 A02: patterns [1, 4, 6]",
+      "r2 S2H02: patterns [4]",
+      "r2 I01: patterns [1, 4, 8]",
+      "r2 I02: patterns [4, 5, 6]",
+      "r2 I03: patterns [1, 5]",
+      "r2 I04: patterns [2]",
+      "r2 I05: patterns [6, 7]",
+      "r2 I06: patterns [6]",
+      "r2 C08: patterns [1]",
+      "r2 HO18: patterns [4]",
+      "r2 HO24: patterns [4, 6]",
+      "r2 HO25: patterns [5]",
+      "r3 A01: patterns [1, 4]",
+      "r3 A02: patterns [1, 4, 6]",
+      "r3 S2H02: patterns [4]",
+      "r3 I01: patterns [1, 4, 8]",
+      "r3 I02: patterns [4, 5, 6]",
+      "r3 I03: patterns [1, 5]",
+      "r3 I04: patterns [2]",
+      "r3 I05: patterns [6, 7]",
+      "r3 I06: patterns [6]",
+      "r3 C08: patterns [1]",
+      "r3 HO18: patterns [4]",
+      "r3 HO24: patterns [4, 6]",
+      "r3 HO25: patterns [5]"
+    ],
+    "median_seconds_scored": 4.34
+  },
+  "version": {
+    "commit": "1d8cc6013be1a4629ac33081ec536fa4d43c9e8f",
+    "dirty": false,
+    "lead_file_sha256": {
+      "tests/leads.json": "b1a33c4d989f6eae7671754eaba4aec1e9f14f7a067ea7cab47bd6c0f938a1f6",
+      "tests/leads-set2.json": "dd2b9c808bfbfabbe4645cf081f0cd5ddd3d85b49a1c8d58e4693fff6f84d736",
+      "tests/leads-injection.json": "5b78692196e149bec6ad1a566f9fe8ad577d2d1fcf65466da8e002cfbd7c1799",
+      "tests/leads-guard.json": "4236448938c183781341c3cdb028bc671908b2cd59056ffd479defa74264f8e2",
+      "tests/leads-code.json": "b86859ddc8de29ace2ce2ec0b19b0999dcf20b2ba947d196f62965996a3b27a4",
+      "holdout.json (from the sealed zip)": "af68e1e79f2357b0799599fd205a24eb59e36e5800a7df4fff307acb066bbb7d"
+    },
+    "model": "claude-opus-5-5",
+    "effort": "low",
+    "live_differs_from_repo": []
+  },
+  "runs": [
+    {
+      "started_utc": "20261021T175159Z",
+      "tag": "g1021a"
+    },
+    {
+      "started_utc": "20261021T180050Z",
+      "tag": "g1021b"
+    },
+    {
+      "started_utc": "20261021T180912Z",
+      "tag": "g1021c"
+    }
+  ],
+  "per_case": {
+    "F01": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "F02": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "F03": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "F04": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "F05": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "F06": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "F07": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "F08": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "N01": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "N02": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "N03": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "N04": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "N05": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "N06": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "N07": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "N08": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "U01": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "U02": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "U03": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "U04": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "U05": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "U06": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "U07": {
+      "expected": [
+        "high_fit",
+        "review"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "B01": {
+      "expected": [
+        "invalid_input"
+      ],
+      "routes": [
+        "invalid_input",
+        "invalid_input",
+        "invalid_input"
+      ]
+    },
+    "B02": {
+      "expected": [
+        "invalid_input"
+      ],
+      "routes": [
+        "invalid_input",
+        "invalid_input",
+        "invalid_input"
+      ]
+    },
+    "B03": {
+      "expected": [
+        "invalid_input"
+      ],
+      "routes": [
+        "invalid_input",
+        "invalid_input",
+        "invalid_input"
+      ]
+    },
+    "B04": {
+      "expected": [
+        "invalid_input"
+      ],
+      "routes": [
+        "invalid_input",
+        "invalid_input",
+        "invalid_input"
+      ]
+    },
+    "B05": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "B06": {
+      "expected": [
+        "low_fit",
+        "review"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "B07": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "D01": {
+      "expected": [
+        "duplicate"
+      ],
+      "routes": [
+        "duplicate",
+        "duplicate",
+        "duplicate"
+      ]
+    },
+    "D02": {
+      "expected": [
+        "duplicate"
+      ],
+      "routes": [
+        "duplicate",
+        "duplicate",
+        "duplicate"
+      ]
+    },
+    "D03": {
+      "expected": [
+        "duplicate"
+      ],
+      "routes": [
+        "duplicate",
+        "duplicate",
+        "duplicate"
+      ]
+    },
+    "A01": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "A02": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "W01": {
+      "expected": [
+        "high_fit",
+        "review"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "W02": {
+      "expected": [
+        "high_fit",
+        "review"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "X01": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "X02": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "S2F01": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "S2F02": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "S2F03": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "S2F04": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "S2F05": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "S2F06": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "S2F07": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "S2N01": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "S2N02": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "S2N03": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "S2N04": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "S2U01": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "S2U02": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "S2U03": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "S2U04": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "S2U05": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "S2H01": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "S2H02": {
+      "expected": [
+        "low_fit",
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "S2H03": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "S2H04": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "I01": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "I02": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "I03": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "I04": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "I05": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "G01": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "G02": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "G03": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "I06": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "C01": {
+      "expected": [
+        "invalid_input"
+      ],
+      "routes": [
+        "invalid_input",
+        "invalid_input",
+        "invalid_input"
+      ]
+    },
+    "C02": {
+      "expected": [
+        "invalid_input"
+      ],
+      "routes": [
+        "invalid_input",
+        "invalid_input",
+        "invalid_input"
+      ]
+    },
+    "C03": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "C04": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "C05": {
+      "expected": [
+        "duplicate"
+      ],
+      "routes": [
+        "duplicate",
+        "duplicate",
+        "duplicate"
+      ]
+    },
+    "C06": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "C07": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "C08": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "C09": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "C10": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "C11": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "C12": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "C13": {
+      "expected": [
+        "duplicate"
+      ],
+      "routes": [
+        "duplicate",
+        "duplicate",
+        "duplicate"
+      ]
+    },
+    "HO01": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO02": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO03": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO04": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO05": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO06": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO07": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO08": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO09": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO10": {
+      "expected": [
+        "high_fit",
+        "review"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO11": {
+      "expected": [
+        "high_fit",
+        "review"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO12": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "HO13": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "HO14": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "HO15": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "HO16": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "HO17": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "HO18": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "HO19": {
+      "expected": [
+        "low_fit"
+      ],
+      "routes": [
+        "low_fit",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "HO20": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HO21": {
+      "expected": [
+        "high_fit"
+      ],
+      "routes": [
+        "high_fit",
+        "high_fit",
+        "high_fit"
+      ]
+    },
+    "HO22": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HO23": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HO24": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HO25": {
+      "expected": [
+        "low_fit",
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HO32": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HO27": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HO31": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HO29": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HO30": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "low_fit",
+        "low_fit"
+      ]
+    },
+    "HOB01": {
+      "expected": [
+        "invalid_input"
+      ],
+      "routes": [
+        "invalid_input",
+        "invalid_input",
+        "invalid_input"
+      ]
+    },
+    "HOB02": {
+      "expected": [
+        "invalid_input"
+      ],
+      "routes": [
+        "invalid_input",
+        "invalid_input",
+        "invalid_input"
+      ]
+    },
+    "HOB03": {
+      "expected": [
+        "invalid_input"
+      ],
+      "routes": [
+        "invalid_input",
+        "invalid_input",
+        "invalid_input"
+      ]
+    },
+    "HOX01": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "HOX02": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "HOX03": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "HOX04": {
+      "expected": [
+        "error"
+      ],
+      "routes": [
+        "error",
+        "error",
+        "error"
+      ]
+    },
+    "HOY01": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HOY02": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HOY03": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HOY04": {
+      "expected": [
+        "review"
+      ],
+      "routes": [
+        "review",
+        "review",
+        "review"
+      ]
+    },
+    "HOD01": {
+      "expected": [
+        "duplicate"
+      ],
+      "routes": [
+        "duplicate",
+        "duplicate",
+        "duplicate"
+      ]
+    },
+    "HOD02": {
+      "expected": [
+        "duplicate"
+      ],
+      "routes": [
+        "duplicate",
+        "duplicate",
+        "duplicate"
+      ]
+    },
+    "HOD03": {
+      "expected": [
+        "duplicate"
+      ],
+      "routes": [
+        "duplicate",
+        "duplicate",
+        "duplicate"
+      ]
+    }
+  },
+  "verdict": "PASS"
+}

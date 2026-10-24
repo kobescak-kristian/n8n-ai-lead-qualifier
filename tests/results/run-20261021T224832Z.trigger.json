@@ -1,0 +1,18 @@
+{
+  "verdict": "PASS",
+  "problems": [],
+  "cf1": [],
+  "cf2": [],
+  "wrong_end_state": [],
+  "notes": [],
+  "exercised_per_path": {
+    "review approve + reply Send": 5,
+    "review approve + reply Don't send": 5,
+    "review Reject": 5,
+    "review no click": 5,
+    "high fit + reply Send": 7,
+    "high fit + reply Don't send": 7,
+    "high fit + reply no click": 7
+  },
+  "stuck_rows_graded_final": []
+}
