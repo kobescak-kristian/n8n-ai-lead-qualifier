@@ -49,33 +49,44 @@ Workflows in [`workflows/`](workflows/) (exported from n8n, no credentials):
 
 ## Outcome
 
-Tested once on 2026-10-17 with **39 fictional test leads**. The expected route for each lead was written down before the run ([`tests/leads.json`](tests/leads.json)). All numbers below come from that run ([full report](tests/results/run-20261017T000614Z.report.md)).
+Final test on 2026-10-21 and 2026-10-22 (level Critical; the pass rules were fixed before the run in [`evals/eval_config.yaml`](evals/eval_config.yaml)). All leads are fictional, and the expected route of each lead was written down before the run. 30 of the AI-scored leads were written by a separate session and kept sealed until this run, so the workflow was not tuned on them. All numbers below come from [`evals/RESULTS.md`](evals/RESULTS.md).
+
+**Rate pass:** 125 leads, each sent 3 times; nobody clicked in Slack.
 
 | Result | Number |
 |---|---|
-| Leads routed as expected | **38 of 39** |
-| Leads in HubSpot that should not be there | **0** |
-| Test contacts in HubSpot | 16, all through an allowed path: 9 clear fits + 7 approved by the reviewer |
-| Broken inputs stopped before the AI | 4 of 4 |
-| Duplicates skipped | 3 of 3 |
-| Attempts to trick the AI (form and hidden website text) | 2 of 2 scored as low fit |
-| Broken AI answer (simulated) | sent to a person, not to the CRM |
-| API failure (simulated) | 3 tries, then Slack alert; nothing written to the CRM |
-| AI-drafted replies | 16 drafted; 9 approved and sent to the test inbox, 7 rejected; none sent without approval |
-| Time from form to routing decision | median 4.9 s, slowest 16.8 s (website that does not answer) for the 32 leads the AI scored; 0.2 s for invalid inputs and duplicates |
+| AI-scored leads routed as expected in all 3 runs | **88 of 89** (allowed: at most 3 misses) |
+| Of these, sealed leads the workflow was never tuned on | 29 of 30 |
+| Code checks: broken input, duplicates, simulated broken AI answer, simulated API failure | 36 of 36 |
+| Leads with no AI score | 0 |
+| Reply sent without a person's approval | **0** |
+| Lead in HubSpot without an allowed path | **0** |
+| Attempt to trick the AI that reached "good fit" | **0** |
+| Replies in the test inbox (none expected, because nobody clicked) | 0 |
 
-In this run the reviewer's approve / reject clicks were made to test both buttons, not to judge lead or draft quality; the quality of the reply drafts was not measured.
+**Trigger pass:** 41 leads; a person made a fixed list of Slack clicks (approve, reject or no click; then send or don't send the reply).
 
-The one miss: a 6-person studio "just exploring, no budget" was expected to go to review; the AI was confident it is a low fit and logged it.
+| Result | Number |
+|---|---|
+| Click paths tested | all 7, at least 5 leads each |
+| Reply sent without a person's approval | **0** |
+| Leads in the wrong end state | 0 |
+| Replies in the test inbox | exactly the 12 expected |
+
+Result of both passes: **PASS**. On this test set, the rate pass supports the claim "at least 90% of AI-scored leads are routed as expected".
+
+The one miss: a lead from an existing client should go to a person for review; in 2 of the 3 runs the AI scored it as a poor fit and logged it.
+
+The clicks in the trigger pass tested the buttons, not the quality of the leads or drafts; the quality of the reply drafts was not measured.
 
 How the test works: [`tests/run_tests.py`](tests/run_tests.py) sends the leads to the workflow, a person answers the Slack messages, and the runner then compares the lead log with the contacts in HubSpot. Company websites are local mock pages ([`tests/mock_sites/server.py`](tests/mock_sites/server.py)); people and companies are fictional and use the reserved `example.com` domain. The broken AI answer and the API failure are **simulated** with test flags that only work when `allow_test_flags` is on.
 
 ### Limits
 
-- One run on fictional leads. It shows that the safety rules work; it is not an accuracy measure on real traffic.
+- Fictional leads only (3 runs of 125 leads and one trigger pass). It shows that the safety rules work; it is not an accuracy measure on real traffic.
 - The duplicate check uses the e-mail address. Two forms with the same e-mail in the same second could both pass.
 - In this local demo the Slack buttons are links that open a short confirmation page, and n8n does not record who clicked. On a hosted n8n (public HTTPS) the buttons work with one click inside Slack and record the approver.
-- The test report reads the first 100 HubSpot contacts.
+- The test report reads up to 5,000 HubSpot contacts (50 pages of 100).
 
 ### Run it yourself
 
