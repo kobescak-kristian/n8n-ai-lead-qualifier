@@ -3,6 +3,7 @@
 Gate and metric definitions: `evals/eval_config.yaml` (level Critical). Every gated run is
 appended here, pass or fail; entries are never edited or deleted. Development runs before the
 freeze are recorded in `STATE.md`.
+Times in entries are local time (UTC+2); run file names use UTC.
 
 Entry format: date | config version | model | dataset version | score per metric | result |
 miss analysis | newly broken cases | changed variables | cost.
