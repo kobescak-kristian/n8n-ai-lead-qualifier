@@ -87,7 +87,7 @@ How the test works: [`tests/run_tests.py`](tests/run_tests.py) sends the leads t
 - The duplicate check uses the e-mail address. Two forms with the same e-mail in the same second could both pass.
 - In this local demo the Slack buttons are links that open a short confirmation page, and n8n does not record who clicked. On a hosted n8n (public HTTPS) the buttons work with one click inside Slack and record the approver.
 - The test report reads up to 5,000 HubSpot contacts (50 pages of 100).
-- Tested only on Windows 11 with a local n8n 2.43.7; not tested on macOS or Linux.
+- The grader and guard tests run on Linux, macOS and Windows in CI; the full workflow was tested only on Windows 11.
 
 ### Run it yourself
 
@@ -104,3 +104,5 @@ How the test works: [`tests/run_tests.py`](tests/run_tests.py) sends the leads t
 | 0.0 | 2026-10-16 | Scaffold |
 | 0.1 | 2026-10-17 | First working build on local n8n; test run of 39 leads recorded |
 | 0.2 | 2026-10-20 | Both webhooks need a secret key; ideal customer profile: any region, 1,000-5,000 employees go to review; workflows renamed |
+| 0.3 | 2026-10-22 | Final test (level Critical) PASS: 88 of 89 AI-scored leads routed as expected, no reply sent without approval |
+| 0.4 | 2026-10-30 | Public release; grader and guard tests run in CI on Linux, macOS and Windows |
