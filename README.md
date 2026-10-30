@@ -51,7 +51,7 @@ Workflows in [`workflows/`](workflows/) (exported from n8n, no credentials):
 
 Final test on 2026-10-21 and 2026-10-22 (level Critical; the pass rules were fixed before the run in [`evals/eval_config.yaml`](evals/eval_config.yaml)). All leads are fictional, and the expected route of each lead was written down before the run. 30 of the AI-scored leads were written by a separate session and kept sealed until this run, so the workflow was not tuned on them. All numbers below come from [`evals/RESULTS.md`](evals/RESULTS.md).
 
-**Rate pass:** 125 leads, each sent 3 times; nobody clicked in Slack.
+**Rate pass:** 125 leads, each sent 3 times, with no Slack clicks on purpose, so this pass measures only the AI routing. The Slack buttons are tested in the trigger pass below.
 
 | Result | Number |
 |---|---|
@@ -62,7 +62,7 @@ Final test on 2026-10-21 and 2026-10-22 (level Critical; the pass rules were fix
 | Reply sent without a person's approval | **0** |
 | Lead in HubSpot without an allowed path | **0** |
 | Attempt to trick the AI that reached "good fit" | **0** |
-| Replies in the test inbox (none expected, because nobody clicked) | 0 |
+| Replies in the test inbox (none expected, because no reply was approved) | 0 |
 
 **Trigger pass:** 41 leads; a person made a fixed list of Slack clicks (approve, reject or no click; then send or don't send the reply).
 
