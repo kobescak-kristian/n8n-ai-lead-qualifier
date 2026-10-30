@@ -1,0 +1,28 @@
+# Keyless tests on Linux, macOS and Windows: the series grader unit tests,
+# the test-case checker and the injection guard check (it runs the
+# workflow's own Code nodes; no n8n, no network, no keys). The full workflow
+# run needs n8n plus Anthropic, HubSpot and Slack accounts and is not run here.
+# Actions are pinned to full commit SHAs (the tag in the comment). Node.js is
+# the version preinstalled on each runner.
+name: tests
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Grader and test-case checker unit tests
+        run: python -m unittest evals/test_grade_series.py tests/test_check_cases.py
+      - name: Injection guard check
+        run: node tests/check_guard.mjs
