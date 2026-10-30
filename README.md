@@ -87,6 +87,7 @@ How the test works: [`tests/run_tests.py`](tests/run_tests.py) sends the leads t
 - The duplicate check uses the e-mail address. Two forms with the same e-mail in the same second could both pass.
 - In this local demo the Slack buttons are links that open a short confirmation page, and n8n does not record who clicked. On a hosted n8n (public HTTPS) the buttons work with one click inside Slack and record the approver.
 - The test report reads up to 5,000 HubSpot contacts (50 pages of 100).
+- Tested only on Windows 11 with a local n8n 2.43.7; not tested on macOS or Linux.
 
 ### Run it yourself
 

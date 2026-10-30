@@ -1,4 +1,4 @@
-# Build red team 2: n8n-lead-qualifier (Q-116), level Critical
+# Build red team 2: n8n-lead-qualifier, level Critical
 
 Date: 2026-10-21. I am a fresh session. I did not build this.
 Scope: commit 71f1922 (build files = df76cc4; 71f1922 changes only STATE.md). Focus: `git diff a29f9d8..71f1922`
@@ -81,7 +81,7 @@ check_cases.py, mock_sites/server.py, all six lead files; the dev1021 run files 
     hold-out is blind".
   - The keeper's label count was made "before the last two lines". Nobody checked the hold-out labels against the
     final ICP text. STATE itself says: if the small_budget label is low_fit only, it still conflicts.
-- Why it matters: (a) the README and Upwork claim will quote a hold-out number that is partly tuned (T1: public
+- Why it matters: (a) the README and profile claim will quote a hold-out number that is partly tuned (T1: public
   under the owner's name). (b) If the small_budget label is `["low_fit"]`, the new line routes it to review: a
   designed miss in all 3 runs, 1 of the 3 allowed misses.
 - Proposed fix (owner decisions, before the freeze):

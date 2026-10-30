@@ -1,4 +1,4 @@
-# Build red team: n8n-lead-qualifier (Q-116), level Critical
+# Build red team: n8n-lead-qualifier, level Critical
 
 Date: 2026-10-20. A fresh session that does not build. It tries to break the BUILD (not the grader)
 after the 2026-10-20 changes: code guard in "Decide route", `model_used` in "Respond: routed", ICP lines

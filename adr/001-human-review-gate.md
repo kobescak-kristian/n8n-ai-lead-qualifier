@@ -5,11 +5,11 @@
 **Author:** Kristian Kobescak
 
 ## Context
-The earlier Make.com build (ai-automation-portfolio, p1-lead-enrichment)
+An earlier Make.com lead-enrichment build
 routes every lead automatically into High / Medium / Low. Its README lists
 the gap: no review option for uncertain cases, so a lead with mixed signals
-gets routed instead of flagged. Upwork demand research
-(career repo, 2026-10-16) shows AI lead qualification into a CRM is the most
+gets routed instead of flagged. Demand research
+(2026-10-16) shows AI lead qualification into a CRM is the most
 common automation request, and buyers ask for an approval step before AI
 messages are sent. This build exists to win a first client with zero
 reviews, so the demo must show that unclear cases and bad AI output are

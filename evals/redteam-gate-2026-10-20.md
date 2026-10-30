@@ -1,4 +1,4 @@
-# Gate red team: n8n-lead-qualifier (Q-116), level Critical
+# Gate red team: n8n-lead-qualifier, level Critical
 
 Date: 2026-10-20. Red team session: a fresh session that does not build and has not opened the hold-out
 (`q116-holdout/` was not opened, unzipped or hashed). No n8n call, no lead sent, nothing committed.

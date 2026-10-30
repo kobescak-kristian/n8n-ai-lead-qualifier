@@ -1,7 +1,7 @@
 # Bench tasks: lead routing
 
 `lead-route.jsonl` is the task file for the lead-qualifier model study. It is
-consumed by [llm-bench](https://github.com/kobescak-kristian/llm-bench)
+consumed by a separate benchmark tool
 (session 3 of the study) with `--tasks` pointing at this file:
 
 ```
@@ -19,10 +19,10 @@ Each task has:
 | Field | Content |
 |---|---|
 | `id` | lead id from the test set |
-| `set`, `category`, `website_status` | for analysis only; llm-bench ignores them |
+| `set`, `category`, `website_status` | for analysis only; the benchmark ignores them |
 | `system` | the exact system prompt the workflow's "Build scoring request" node builds, with the Settings node's values (company name, ICP) substituted |
 | `prompt` | the exact user message that node builds: the cleaned lead form as JSON (without the internal `source` field) and the website block with its status and the mock site's text |
-| `check` | `{"type": "route", "value": [...]}`: the expected route(s); llm-bench applies the workflow's "Decide route" rule to the model's JSON answer |
+| `check` | `{"type": "route", "value": [...]}`: the expected route(s); the benchmark applies the workflow's "Decide route" rule to the model's JSON answer |
 
 `system` and `prompt` were not retyped. They were produced by running the
 workflow's own Code nodes ("Validate lead", "Website summary", "Build scoring
@@ -35,7 +35,7 @@ W02) therefore show `status="unreachable"` exactly as the live run saw them.
 Anthropic API as `output_config.format`, plus the model, effort and routing
 thresholds from the Settings node. The system prompt does not describe the
 output format; the workflow relies on that schema. A fair benchmark run must
-enforce the same schema (llm-bench's per-model `extra` body fields can carry
+enforce the same schema (the benchmark's per-model `extra` body fields can carry
 it), or a model may answer in prose and fail the format check for the wrong
 reason.
 

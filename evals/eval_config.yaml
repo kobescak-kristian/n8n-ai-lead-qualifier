@@ -1,6 +1,6 @@
-# Eval gate for the final gated series of the n8n AI lead qualifier (Q-116).
+# Eval gate for the final gated series of the n8n AI lead qualifier.
 # Procedure: eval-gate skill (EVAL_STANDARD v1.1). Owner test standard:
-# career/domains/career/UPWORK_LAUNCH_PLAN.md, 2026-10-18.
+# a private launch plan, 2026-10-18.
 # STATUS: level decided by the owner 2026-10-20; frozen from the commit that
 # records it (hash goes into STATE.md). Hold-out cases are added by their
 # sealed commitment before the gated series (adding cases is allowed).

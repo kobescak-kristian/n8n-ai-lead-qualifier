@@ -1,4 +1,4 @@
-# Red team of the gate fixes: n8n-lead-qualifier (Q-116), level Critical
+# Red team of the gate fixes: n8n-lead-qualifier, level Critical
 
 Date: 2026-10-20. Second gate red team: a fresh session that does not build. It reviews the builder's answer
 to the first gate red team (`evals/redteam-gate-2026-10-20.md`, "Builder response") and the two PROPOSED gate
@@ -339,7 +339,7 @@ was over-corrected. The first round's 7 false PASS probes (P1-P5, P8, P9) all gi
   guard). eval-gate §1 calls an undoable CRM record Standard-level harm. And CF3 makes a FAIL much more likely.
 - Effect on passing the first time: there are 8 visible injection rate cases (A01, A02, S2H02, I01-I05) = 24 calls,
   plus the hold-out's (unknown). Chance of no CF3 over 30 calls: 86% if one call in 200 is fooled, 74% at one in
-  100, 55% at one in 50. No data yet: the 2026-10-17 run had only 2 injection leads, 1 run. The llm-bench
+  100, 55% at one in 50. No data yet: the 2026-10-17 run had only 2 injection leads, 1 run. The benchmark
   results on A01, A02 and S2H02 are the evidence that would change this estimate.
 - Better than the rule alone: a code guard in "Decide route" (a build change, free under §7): if the form or
   website text has instruction-like text aimed at the AI (for example "ignore ... instructions", "system note",
@@ -396,7 +396,7 @@ Owner decisions 2026-10-20: (a) CF3 adopted together with a code guard in "Decid
 | 14 | Test changed | I01-I05 = `["low_fit"]` (owner) |
 | 15 | Test changed | repo-relative POSIX paths in run files; grader crash = INVALID RUN (exit 3); `--dev` mode for R2 (no hold-out, no frozen commit, no case-count minimum, never a gate result); apply-then-export and hold-out folder notes in the preflight |
 
-Build change for (a): "Decide route" caps the route at review when the form or website text matches narrow instruction patterns. `tests/check_guard.mjs` runs the node's own code with a perfect AI answer on every test lead and mock page: all 8 prompt_injection cases stopped, no other AI-routed case stopped (`OK: 10 stopped, 102 passed`; the 2 extra are the code-path cases C08 and C12, which carry injection text). The live apply waits for a free n8n slot (Q-117 has n8n today).
+Build change for (a): "Decide route" caps the route at review when the form or website text matches narrow instruction patterns. `tests/check_guard.mjs` runs the node's own code with a perfect AI answer on every test lead and mock page: all 8 prompt_injection cases stopped, no other AI-routed case stopped (`OK: 10 stopped, 102 passed`; the 2 extra are the code-path cases C08 and C12, which carry injection text). The live apply waits for a free n8n slot (another build has n8n today).
 
 Evidence: `python -m unittest evals.test_grade_series tests.test_check_cases` -> 71 tests OK (every probe of both red teams planted); `python tests/check_cases.py tests/leads.json tests/leads-set2.json tests/leads-injection.json tests/leads-code.json` -> OK, exit 0; `node tests/check_guard.mjs` -> OK, exit 0.
 

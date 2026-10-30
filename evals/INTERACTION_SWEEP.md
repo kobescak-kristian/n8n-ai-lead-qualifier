@@ -58,7 +58,7 @@ depend on the sealed hold-out.
 
 - Done 2026-10-20: `evals/grade_series.py` (rate and trigger pass, INVALID RUN), hardened
   after the gate red team (`evals/redteam-gate-2026-10-20.md`); HubSpot paging.
-- Model choice (llm-bench study), applied with `tools/n8n_api.py apply` together with
+- Model choice (benchmark study), applied with `tools/n8n_api.py apply` together with
   the `model_used` change; then a build red team (level Critical).
 - R2: the visible set passes 3 full development runs in a row at gate thresholds.
 - Written preflight `evals/PREFLIGHT.md`, dry run of the frozen commit.

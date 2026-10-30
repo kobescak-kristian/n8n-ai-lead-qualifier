@@ -1,4 +1,4 @@
-# Eval results: n8n AI lead qualifier (Q-116)
+# Eval results: n8n AI lead qualifier
 
 Gate and metric definitions: `evals/eval_config.yaml` (level Critical). Every gated run is
 appended here, pass or fail; entries are never edited or deleted. Development runs before the

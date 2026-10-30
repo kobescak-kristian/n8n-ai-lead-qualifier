@@ -76,7 +76,7 @@ for (const [setName, file] of sets) {
   }
 }
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
-const header = `# llm-bench task file for the lead-qualifier model study. Built by executing the workflow's own Code nodes; see tests/bench/README.md. Labels owner-reviewed 2026-10-19.`;
+const header = `# Benchmark task file for the lead-qualifier model study. Built by executing the workflow's own Code nodes; see tests/bench/README.md. Labels owner-reviewed 2026-10-19.`;
 fs.writeFileSync(OUT, header + '\n' + lines.join('\n') + '\n');
 fs.writeFileSync(path.join(REPO, 'tests', 'bench', 'output-schema.json'), JSON.stringify({
   about: "Exact JSON schema the workflow's 'Build scoring request' node passes to the Anthropic API as output_config.format (type json_schema). The system prompt does not describe the output format; the workflow relies on this schema. A fair benchmark must enforce it the same way or the model may not answer in JSON at all.",
