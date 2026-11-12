@@ -8,13 +8,15 @@ to, never this file.
 
 An n8n workflow that enriches, scores and routes inbound leads with AI, and sends unclear leads and AI-drafted replies to a person in Slack before anything reaches the CRM or the lead. Human overview: `README.md`.
 
+Classification: PROJECT.
+
 ## Authority and conflict handling
 
 | Question | Canonical source |
 |---|---|
 | What the system is and claims | `README.md` |
 | Why a design decision was made | `adr/` |
-| Build status, open decisions, change history | `STATE.md` |
+| Current status, latest result (verdict and pointer), open items | `STATE.md` |
 | What the implementation actually does | source, tests and configuration inspected together |
 
 When sources disagree: an adopted ADR outranks the text it amends;
@@ -48,6 +50,8 @@ Starting points, not exhaustive reading lists.
 - No secrets or machine-local absolute paths in tracked files.
 - Never rewrite git history.
 - This file is an instruction surface, not a security boundary.
+- The `STATE.md` sections that older files cite (development runs, Change Log, decisions
+  before the freeze) are at `git show b63f8f8:STATE.md`.
 
 ## Verification
 
