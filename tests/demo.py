@@ -1,4 +1,4 @@
-"""Send three fresh demo leads, one per Enter key, for the Loom recording.
+"""Send three fresh demo leads, one per Enter key, for a demo recording.
 
 Needs n8n and the mock sites running (same as run_tests.py). The webhook keys
 come from LEAD_QUALIFIER_KEY and LEAD_REPORT_KEY, or are asked for once (hidden).

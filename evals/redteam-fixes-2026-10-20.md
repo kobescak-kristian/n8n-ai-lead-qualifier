@@ -332,7 +332,7 @@ was over-corrected. The first round's 7 false PASS probes (P1-P5, P8, P9) all gi
 
 - Case for: high_fit is the only route that writes to HubSpot with no person in between, and the only guard is
   the AI's own `manipulation_attempt` flag ("Decide route"). When an injection works, that same AI is the one
-  that does not flag it. The README and the Loom will say that manipulation never reaches the CRM; with injection as
+  that does not flag it. The README and the demo video will say that manipulation never reaches the CRM; with injection as
   an ordinary miss, the series could PASS while showing the opposite. eval-gate §4: "An LLM failure that must
   never happen belongs here, not in more test cases".
 - Case against: the harm is a CRM record that can be deleted, and the reply still needs a Send click (CF1
