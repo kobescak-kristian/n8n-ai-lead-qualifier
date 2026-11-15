@@ -1,6 +1,8 @@
 # n8n AI Lead Qualifier
 
-An n8n workflow that checks, researches and scores every new lead with AI, sends good leads to HubSpot, and asks a person in Slack before anything uncertain reaches the CRM or a prospect's inbox.
+n8n workflow that scores new leads with Claude, sends good fits to HubSpot, and asks a person about unsure ones.
+
+**Status:** Built, 2026-10-30. v0.4.
 
 ## Problem
 
@@ -23,29 +25,6 @@ For every new lead the workflow:
 8. **Logs every step** in an n8n data table and **alerts in Slack** when an API call fails after 3 tries.
 
 The ideal-customer description, score limits and AI model are settings in one node, so a client can change them without touching the logic.
-
-## System
-
-![architecture](docs/architecture.png)
-
-| Part | Used here |
-|---|---|
-| Automation | n8n 2.43.7, self-hosted (local) |
-| AI | Claude Opus 5.5 (`claude-opus-5-5`, effort `low`), JSON-schema output, checked again in the workflow |
-| CRM | HubSpot (free account, service key) |
-| Human review and alerts | Slack (approve / reject buttons) |
-| E-mail | Gmail SMTP; in demo mode every reply goes only to a test inbox |
-| Lead log | n8n data table `lead_log` |
-
-Workflows in [`workflows/`](workflows/) (exported from n8n, no credentials):
-
-| File | Purpose |
-|---|---|
-| `lead-qualifier.json` | The main workflow (62 nodes) |
-| `error-alert.json` | Slack alert when the main workflow fails unexpectedly |
-| `lead-report.json` | Read-only report endpoint used by the test runner |
-| `setup-lead-log-table.json` | Creates the lead log table once |
-| `test-reset-lead-log.json` | Empties the lead log before a test run |
 
 ## Outcome
 
@@ -81,15 +60,30 @@ The clicks in the trigger pass tested the buttons, not the quality of the leads 
 
 How the test works: [`tests/run_tests.py`](tests/run_tests.py) sends the leads to the workflow, a person answers the Slack messages, and the runner then compares the lead log with the contacts in HubSpot. Company websites are local mock pages ([`tests/mock_sites/server.py`](tests/mock_sites/server.py)); people and companies are fictional and use the reserved `example.com` domain. The broken AI answer and the API failure are **simulated** with test flags that only work when `allow_test_flags` is on.
 
-### Limits
+## System
 
-- Fictional leads only (3 runs of 125 leads and one trigger pass). It shows that the safety rules work; it is not an accuracy measure on real traffic.
-- The duplicate check uses the e-mail address. Two forms with the same e-mail in the same second could both pass.
-- In this local demo the Slack buttons are links that open a short confirmation page, and n8n does not record who clicked. On a hosted n8n (public HTTPS) the buttons work with one click inside Slack and record the approver.
-- The test report reads up to 5,000 HubSpot contacts (50 pages of 100).
-- The grader and guard tests run on Linux, macOS and Windows in CI; the full workflow was tested only on Windows 11.
+![architecture](docs/architecture.png)
 
-### Run it yourself
+| Part | Used here |
+|---|---|
+| Automation | n8n 2.43.7, self-hosted (local) |
+| AI | Claude Opus 5.5 (`claude-opus-5-5`, effort `low`), JSON-schema output, checked again in the workflow |
+| CRM | HubSpot (free account, service key) |
+| Human review and alerts | Slack (approve / reject buttons) |
+| E-mail | Gmail SMTP; in demo mode every reply goes only to a test inbox |
+| Lead log | n8n data table `lead_log` |
+
+Workflows in [`workflows/`](workflows/) (exported from n8n, no credentials):
+
+| File | Purpose |
+|---|---|
+| `lead-qualifier.json` | The main workflow (62 nodes) |
+| `error-alert.json` | Slack alert when the main workflow fails unexpectedly |
+| `lead-report.json` | Read-only report endpoint used by the test runner |
+| `setup-lead-log-table.json` | Creates the lead log table once |
+| `test-reset-lead-log.json` | Empties the lead log before a test run |
+
+## Run it yourself
 
 1. Install n8n (Node.js 20.19 to 24) and start it: `n8n start`.
 2. Import the files in `workflows/` and run "n8n-lead-qualifier: setup lead_log table" once.
@@ -97,12 +91,24 @@ How the test works: [`tests/run_tests.py`](tests/run_tests.py) sends the leads t
 4. In the **Settings** node set `slack_channel`, `from_email` and `demo_inbox`; keep `demo_mode` on for tests. Publish the main, report and error workflows.
 5. For the test: `python tests/mock_sites/server.py`, then `python tests/run_tests.py send`, answer the Slack messages, then `python tests/run_tests.py report tests/results/<run-file>.json`.
 
+## Limitations
+
+- Fictional leads only (3 runs of 125 leads and one trigger pass). It shows that the safety rules work; it is not an accuracy measure on real traffic.
+- The duplicate check uses the e-mail address. Two forms with the same e-mail in the same second could both pass.
+- In this local demo the Slack buttons are links that open a short confirmation page, and n8n does not record who clicked. On a hosted n8n (public HTTPS) the buttons work with one click inside Slack and record the approver.
+- The test report reads up to 5,000 HubSpot contacts (50 pages of 100).
+- The grader and guard tests run on Linux, macOS and Windows in CI; the full workflow was tested only on Windows 11.
+
 ## Version Log
 
 | version | date | change |
 |---|---|---|
-| 0.0 | 2026-10-16 | Scaffold |
-| 0.1 | 2026-10-17 | First working build on local n8n; test run of 39 leads recorded |
-| 0.2 | 2026-10-20 | Both webhooks need a secret key; ideal customer profile: any region, 1,000-5,000 employees go to review; workflows renamed |
-| 0.3 | 2026-10-22 | Final test (level Critical) PASS: 88 of 89 AI-scored leads routed as expected, no reply sent without approval |
 | 0.4 | 2026-10-30 | Public release; grader and guard tests run in CI on Linux, macOS and Windows |
+| 0.3 | 2026-10-22 | Final test (level Critical) PASS: 88 of 89 AI-scored leads routed as expected, no reply sent without approval |
+| 0.2 | 2026-10-20 | Both webhooks need a secret key; ideal customer profile: any region, 1,000-5,000 employees go to review; workflows renamed |
+| 0.1 | 2026-10-17 | First working build on local n8n; test run of 39 leads recorded |
+| 0.0 | 2026-10-16 | Scaffold |
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).
