@@ -17,7 +17,7 @@ import grade_series as g  # noqa: E402
 
 MODEL = "claude-opus-5-5"
 VISIBLE = "tests/visible.json"
-HOLDOUT = "C:/q116-holdout-extract/holdout.json"
+HOLDOUT = "holdout-extract/holdout.json"  # label only: the hold-out file is outside the repository
 END = {"high_fit": ("crm_created", "awaiting_approval"), "review": ("review_pending", ""),
        "low_fit": ("logged_low_fit", ""), "duplicate": ("duplicate_skipped", ""), "error": ("error_alerted", ""),
        "invalid_input": ("rejected_input", "")}
